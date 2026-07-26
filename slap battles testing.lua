@@ -938,12 +938,10 @@ PremiumOnly = <bool> - Makes the tab accessible only to premium users.
 local Players = game:GetService("Players")
 local localPlayer = Players.LocalPlayer
 
--- Инициализация глобальных переменных (если они еще не созданы)
 _G.HelperAccountName = _G.HelperAccountName or ""
 _G.RecipientAccountName = _G.RecipientAccountName or ""
 _G.VoidTrackerActive = _G.VoidTrackerActive or false
 
--- ФОНОВЫЙ ТРЕКЕР (Вставляется автоматически вместе с текстбоксами)
 if not _G.VoidTrackerActive then
     _G.VoidTrackerActive = true
     task.spawn(function()
@@ -961,12 +959,10 @@ if not _G.VoidTrackerActive then
                         local posH = charH.HumanoidRootPart.Position
                         local posR = charR.HumanoidRootPart.Position
                         
-                        -- Проверяем, что ОБА аккаунта находятся в пустоте дальше 95,000 студий
                         if math.abs(posH.X) > 95000 and math.abs(posH.Z) > 95000 and math.abs(posR.X) > 95000 and math.abs(posR.Z) > 95000 then
                             if localPlayer.Character and localPlayer.Character:FindFirstChildOfClass("Humanoid") then
                                 localPlayer.Character:FindFirstChildOfClass("Humanoid").Health = 0
-                                print("[Void] Оба игрока в пустоте! Сработал автоматический Reset.")
-                                task.wait(5) -- Задержка против циклического спама смертями
+                                task.wait(5)
                             end
                         end
                     end
@@ -976,7 +972,6 @@ if not _G.VoidTrackerActive then
     end)
 end
 
--- Вспомогательная функция для поиска и ТП в пустоту
 local function findAndTeleport(enteredText, roleType)
     if enteredText == "" then return end
     
@@ -989,7 +984,6 @@ local function findAndTeleport(enteredText, roleType)
     end
     
     if targetPlayer and targetPlayer.Name ~= localPlayer.Name then
-        -- Записываем данные в зависимости от того, какой TextBox был использован
         if roleType == "Helper" then
             _G.HelperAccountName = targetPlayer.Name
             _G.RecipientAccountName = localPlayer.Name
@@ -998,25 +992,24 @@ local function findAndTeleport(enteredText, roleType)
             _G.HelperAccountName = localPlayer.Name
         end
         
-        -- Мгновенная отправка в пустоту (100k студий)
         local character = localPlayer.Character
         if character then
             local rootPart = character:WaitForChild("HumanoidRootPart", 5)
-            if rootPart then
+            local humanoid = character:FindFirstChildOfClass("Humanoid")
+            if rootPart and humanoid then
+                humanoid.PlatformStand = true
+                task.wait(0.05)
                 rootPart.CFrame = CFrame.new(100000, 5000, 100000)
-                print("[Void] " .. roleType .. " успешно отправлен на 100к студий.")
+                rootPart.AssemblyLinearVelocity = Vector3.new(0, 0, 0)
+                task.wait(0.1)
+                humanoid.PlatformStand = false
             end
         end
     end
 end
 
--- ==========================================
--- СКОПИРУЙТЕ ЭТИ ДВА ПОЛЯ В ВАШ ТАБ (MainTab)
--- ==========================================
-
--- Текстбокс 1: Для Helper-аккаунта
 Tab6:AddTextbox({
-    Name = "Helper (Введи ник помощника)",
+    Name = "Helper (Your alt name)",
     Default = "",
     TextDisappear = false,
     Callback = function(text)
@@ -1024,9 +1017,8 @@ Tab6:AddTextbox({
     end
 })
 
--- Текстбокс 2: Для Recipient-аккаунта (Получатель / Основа)
 Tab6:AddTextbox({
-    Name = "Recipient (Введи ник основы)",
+    Name = "Recipient (Your main account)",
     Default = "",
     TextDisappear = false,
     Callback = function(text)
