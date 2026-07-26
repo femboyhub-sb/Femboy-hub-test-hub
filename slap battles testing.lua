@@ -923,5 +923,116 @@ else
         end    
     })
 
+local Tab6 = Window:MakeTab({
+    Name = "Helper logic",
+    Icon = "rbxassetid://4483345998",
+    PremiumOnly = false
+})
+
+--[[
+Name = <string> - The name of the tab.
+Icon = <string> - The icon of the tab.
+PremiumOnly = <bool> - Makes the tab accessible only to premium users.
+]]
+
+local Players = game:GetService("Players")
+local localPlayer = Players.LocalPlayer
+
+-- Инициализация глобальных переменных (если они еще не созданы)
+_G.HelperAccountName = _G.HelperAccountName or ""
+_G.RecipientAccountName = _G.RecipientAccountName or ""
+_G.VoidTrackerActive = _G.VoidTrackerActive or false
+
+-- ФОНОВЫЙ ТРЕКЕР (Вставляется автоматически вместе с текстбоксами)
+if not _G.VoidTrackerActive then
+    _G.VoidTrackerActive = true
+    task.spawn(function()
+        while true do
+            task.wait(0.2)
+            if _G.HelperAccountName ~= "" and _G.RecipientAccountName ~= "" then
+                local helperObj = Players:FindFirstChild(_G.HelperAccountName)
+                local recipientObj = Players:FindFirstChild(_G.RecipientAccountName)
+                
+                if helperObj and recipientObj then
+                    local charH = helperObj.Character
+                    local charR = recipientObj.Character
+                    
+                    if charH and charR and charH:FindFirstChild("HumanoidRootPart") and charR:FindFirstChild("HumanoidRootPart") then
+                        local posH = charH.HumanoidRootPart.Position
+                        local posR = charR.HumanoidRootPart.Position
+                        
+                        -- Проверяем, что ОБА аккаунта находятся в пустоте дальше 95,000 студий
+                        if math.abs(posH.X) > 95000 and math.abs(posH.Z) > 95000 and math.abs(posR.X) > 95000 and math.abs(posR.Z) > 95000 then
+                            if localPlayer.Character and localPlayer.Character:FindFirstChildOfClass("Humanoid") then
+                                localPlayer.Character:FindFirstChildOfClass("Humanoid").Health = 0
+                                print("[Void] Оба игрока в пустоте! Сработал автоматический Reset.")
+                                task.wait(5) -- Задержка против циклического спама смертями
+                            end
+                        end
+                    end
+                end
+            end
+        end
+    end)
+end
+
+-- Вспомогательная функция для поиска и ТП в пустоту
+local function findAndTeleport(enteredText, roleType)
+    if enteredText == "" then return end
+    
+    local targetPlayer = nil
+    for _, p in pairs(Players:GetPlayers()) do
+        if p.Name:lower():find(enteredText:lower()) or p.DisplayName:lower():find(enteredText:lower()) then
+            targetPlayer = p
+            break
+        end
+    end
+    
+    if targetPlayer and targetPlayer.Name ~= localPlayer.Name then
+        -- Записываем данные в зависимости от того, какой TextBox был использован
+        if roleType == "Helper" then
+            _G.HelperAccountName = targetPlayer.Name
+            _G.RecipientAccountName = localPlayer.Name
+        elseif roleType == "Recipient" then
+            _G.RecipientAccountName = targetPlayer.Name
+            _G.HelperAccountName = localPlayer.Name
+        end
+        
+        -- Мгновенная отправка в пустоту (100k студий)
+        local character = localPlayer.Character
+        if character then
+            local rootPart = character:WaitForChild("HumanoidRootPart", 5)
+            if rootPart then
+                rootPart.CFrame = CFrame.new(100000, 5000, 100000)
+                print("[Void] " .. roleType .. " успешно отправлен на 100к студий.")
+            end
+        end
+    end
+end
+
+-- ==========================================
+-- СКОПИРУЙТЕ ЭТИ ДВА ПОЛЯ В ВАШ ТАБ (MainTab)
+-- ==========================================
+
+-- Текстбокс 1: Для Helper-аккаунта
+Tab6:AddTextbox({
+    Name = "Helper (Введи ник помощника)",
+    Default = "",
+    TextDisappear = false,
+    Callback = function(text)
+        findAndTeleport(text, "Helper")
+    end
+})
+
+-- Текстбокс 2: Для Recipient-аккаунта (Получатель / Основа)
+Tab6:AddTextbox({
+    Name = "Recipient (Введи ник основы)",
+    Default = "",
+    TextDisappear = false,
+    Callback = function(text)
+        findAndTeleport(text, "Recipient")
+    end
+})
+    
     OrionLib:Init()
 end
