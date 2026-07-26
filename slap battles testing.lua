@@ -516,4 +516,210 @@ Tab1:AddButton({
         if easterQuest then
             local completed = easterQuest.completed
             local rewarded = easterQuest.rewarded
-            local collectedEg
+            local collectedEggs = easterQuest.counters.collectedEggs or 0
+            
+            -- Check conditions
+            if completed == false and rewarded == false then
+                if collectedEggs < 10 then
+                    local eggsNeeded = 10 - collectedEggs
+                    local eggText = eggsNeeded == 1 and "Egg" or "Eggs"
+                    local ownedText = collectedEggs == 1 and "Egg" or "Eggs"
+                    
+                    OrionLib:MakeNotification({
+                        Name = "Easter Egg Hunter",
+                        Content = string.format("Finish Easter Egg Hunter Quest First (And Collect %d %s In Total [Owned: %d %s])", 
+                            eggsNeeded, eggText, collectedEggs, ownedText),
+                        Image = "rbxassetid://4483345998",
+                        Time = 5
+                    })
+                    
+                elseif collectedEggs == 10 then
+                    -- All eggs collected but quest not completed? Fire click detector
+                    fireclickdetector(workspace.EggTeleport.ClickDetector)
+                end
+                
+            elseif completed == true and rewarded == false then
+                OrionLib:MakeNotification({
+                    Name = "Easter Egg Hunter",
+                    Content = "Claim Reward From Easter Egg Hunter Quest First",
+                    Image = "rbxassetid://4483345998",
+                    Time = 5
+                })
+                
+            elseif completed == false and rewarded == true then
+                OrionLib:MakeNotification({
+                    Name = "Easter Egg Hunter",
+                    Content = "You Got Bug On Your Quest Please Rejoin",
+                    Image = "rbxassetid://4483345998",
+                    Time = 5
+                })
+                
+            elseif completed == true and rewarded == true and collectedEggs == 10 then
+                -- Quest complete and reward claimed, fire click detector
+                fireclickdetector(workspace.EggTeleport.ClickDetector)
+            end
+        else
+            OrionLib:MakeNotification({
+                Name = "Error",
+                Content = "Easter Hunter quest not found in data",
+                Image = "rbxassetid://4483345998",
+                Time = 5
+            })
+        end
+    end
+})
+
+Tab1:AddButton({
+    Name = "Claim Shellbert Reward Glove (Instantly)",
+    Callback = function()
+game:GetService("ReplicatedStorage").Remotes.GloveReward.Replicate:FireServer()
+task.wait(0.1)
+game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = workspace.RewardGlove.RewardGlove.CFrame
+    end
+})
+
+Tab1:AddButton({
+    Name = "Insta Lotus (disable verify teleports!)",
+    Callback = function()
+        print("button pressed")
+    -- if you're using delta, turn off your anti teleport first!
+loadstring(game:HttpGet('https://pastefy.app/Ds8bqkE9/raw'))()
+    end    
+})
+
+--[[
+Name = <string> - The name of the button.
+Callback = <function> - Function executed when the button is pressed.
+]]
+
+Tab1:AddButton({
+    Name = "Auto get doorkeeper (disable verify teleports!)",
+    Callback = function()
+        print("button pressed")
+loadstring(game:HttpGet('https://pastefy.app/zbj5RgPl/raw'))()
+    end    
+})
+
+--[[
+Name = <string> - The name of the button.
+Callback = <function> - Function executed when the button is pressed.
+]]
+
+Tab1:AddButton({
+    Name = "Auto get slender (EXPERIMENTAL)",
+    Callback = function()
+        print("button pressed")
+root.CFrame = parent.CFrame
+                    else
+                        root.CFrame = pocket:GetPivot()
+                    end
+                end
+                
+                task.wait(0.3)
+                prompt.HoldDuration = 0
+                prompt.MaxActivationDistance = 9999
+                prompt.RequiresLineOfSight = false
+
+                task.wait(0.1)
+                fireproximityprompt(prompt)
+                task.wait(0.2)
+                fireproximityprompt(prompt)
+                task.wait(2)
+            end
+        end
+
+        local pad = nil
+        t = tick() + 10
+        repeat
+            task.wait(0.2)
+            if pocket and pocket:FindFirstChild("PocketKeypad") then
+                pad = pocket.PocketKeypad
+            else
+                local rf = Workspace:FindFirstChild("RoomsFolder")
+                if rf then
+                    for _, r in ipairs(rf:GetChildren()) do
+                        if string.find(r.Name, "'s Room") and r:FindFirstChild("PocketKeypad") then
+                            pad = r.PocketKeypad
+                            break
+                        end
+                    end
+                end
+            end
+        until pad or tick() > t
+
+        if pad and pad:FindFirstChild("Buttons") then
+            local btns = pad.Buttons
+            if btns:FindFirstChild("Reset") and btns.Reset:FindFirstChild("ClickDetector") then
+                fireclickdetector(btns.Reset.ClickDetector)
+                task.wait(0.3)
+            end
+
+            for i = 1, #code do
+                local char = code:sub(i, i)
+                local b = btns:FindFirstChild(char)
+                if b and b:FindFirstChild("ClickDetector") then
+                    fireclickdetector(b.ClickDetector)
+                    task.wait(0.4)
+                end
+            end
+
+            task.wait(0.3)
+            if btns:FindFirstChild("Enter") and btns.Enter:FindFirstChild("ClickDetector") then
+                fireclickdetector(btns.Enter.ClickDetector)
+                task.wait(1)
+            end
+        end
+
+        local function getPages()
+            local bRoom = Workspace:FindFirstChild("BountyHunterRoom")
+            if bRoom then
+                local m = bRoom:FindFirstChild("BountyHunterMysteryRoom")
+                if m and m:FindFirstChild("Pages") then
+                    for _, p in ipairs(m.Pages:GetChildren()) do
+                        local cd = p:FindFirstChild("ClickDetector")
+                        if cd then fireclickdetector(cd) end
+                    end
+                end
+            end
+
+            for _, o in ipairs(Workspace:GetDescendants()) do
+                if o.Name == "Pages" or string.find(o.Name:lower(), "page") then
+                    for _, p in ipairs(o:GetChildren()) do
+                        local cd = p:FindFirstChild("ClickDetector")
+                        if cd then fireclickdetector(cd) end
+                    end
+                end
+            end
+        end
+
+        getPages()
+        task.wait(0.5)
+        reset()
+    end
+
+elseif game.PlaceId == 132277598079047 then
+    local folder = workspace:WaitForChild("Pages", 10)
+    if folder then
+        for _, obj in ipairs(folder:GetChildren()) do
+            if obj:FindFirstChild("Part") and obj.Part:FindFirstChildWhichIsA("ProximityPrompt") then
+                local char = game.Players.LocalPlayer.Character or game.Players.LocalPlayer.CharacterAdded:Wait()
+                local hrp = char:FindFirstChild("HumanoidRootPart")
+                if hrp then
+                    hrp.CFrame = obj.Part.CFrame
+                    task.wait(0.2)
+                    fireproximityprompt(obj.Part.ProximityPrompt)
+                    task.wait(0.5)
+                end
+            end
+        end
+    end
+end
+    end    
+})
+
+--[[
+Name = <string> - The name of the button.
+Callback = <function> - Function executed when the button is pressed.
+]]
+
+OrionLib:Init()
