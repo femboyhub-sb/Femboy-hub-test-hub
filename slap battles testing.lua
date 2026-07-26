@@ -609,117 +609,226 @@ Tab1:AddButton({
     Name = "Auto get slender (EXPERIMENTAL)",
     Callback = function()
         print("button pressed")
-root.CFrame = parent.CFrame
-                    else
-                        root.CFrame = pocket:GetPivot()
+        task.spawn(function()
+            if game.PlaceId == 6403373529 or game.PlaceId == 9015014224 then
+                local Workspace = game:GetService("Workspace")
+                local ReplicatedStorage = game:GetService("ReplicatedStorage")
+                local plr = game.Players.LocalPlayer
+
+                local function gethrp()
+                    local c = plr.Character or plr.CharacterAdded:Wait()
+                    return c:WaitForChild("HumanoidRootPart", 5)
+                end
+
+                local function equipGlove(glove)
+                    local stats = plr:FindFirstChild("leaderstats")
+                    if stats and stats:FindFirstChild("Glove") and stats.Glove.Value ~= glove then
+                        if plr.Character and not plr.Character:FindFirstChild("entered") then
+                            local g = Workspace.Lobby:FindFirstChild(glove)
+                            if g and g:FindFirstChild("ClickDetector") then
+                                fireclickdetector(g.ClickDetector)
+                                task.wait(0.5)
+                            end
+                        end
                     end
                 end
-                
-                task.wait(0.3)
-                prompt.HoldDuration = 0
-                prompt.MaxActivationDistance = 9999
-                prompt.RequiresLineOfSight = false
 
-                task.wait(0.1)
-                fireproximityprompt(prompt)
-                task.wait(0.2)
-                fireproximityprompt(prompt)
-                task.wait(2)
-            end
-        end
+                local function reset()
+                    if plr.Character and plr.Character:FindFirstChild("Humanoid") then
+                        plr.Character.Humanoid.Health = 0
+                    end
+                    plr.CharacterAdded:Wait()
+                    task.wait(1)
+                end
 
-        local pad = nil
-        t = tick() + 10
-        repeat
-            task.wait(0.2)
-            if pocket and pocket:FindFirstChild("PocketKeypad") then
-                pad = pocket.PocketKeypad
-            else
-                local rf = Workspace:FindFirstChild("RoomsFolder")
-                if rf then
-                    for _, r in ipairs(rf:GetChildren()) do
-                        if string.find(r.Name, "'s Room") and r:FindFirstChild("PocketKeypad") then
-                            pad = r.PocketKeypad
-                            break
+                equipGlove("Balloony")
+                local root = gethrp()
+                if root then
+                    root.CFrame = CFrame.new(-1210.02, 331.92, 3.47, 0.018, 0, 1, 0, 1, 0, -1, 0, 0.018)
+                end
+
+                local tape = Workspace:WaitForChild("TapeRecorder", 10)
+                if tape and tape:FindFirstChild("Front") then
+                    root = gethrp()
+                    if root then
+                        root.CFrame = tape.Front.CFrame * CFrame.new(0, 0, -1)
+                    end
+                    task.wait(0.2)
+                    
+                    if tape.Front:FindFirstChild("ProximityPrompt") then
+                        fireproximityprompt(tape.Front.ProximityPrompt)
+                    end
+                    task.wait(0.15)
+
+                    local code = ""
+                    local rec = true
+                    local sfx = tape.Front:FindFirstChild("DigitsSFX")
+
+                    while rec do
+                        task.wait()
+                        if sfx then
+                            for i = 0, 9 do
+                                local d = tostring(i)
+                                local snd = sfx:FindFirstChild(d)
+                                if snd and snd.Playing then
+                                    code = code .. d
+                                    task.wait(1)
+                                    break
+                                end
+                            end
+                        end
+                        
+                        if tape.Front.ProximityPrompt.Enabled then
+                            rec = false
+                        end
+                    end
+
+                    reset()
+                    equipGlove("Pocket")
+
+                    root = gethrp()
+                    if root then
+                        root.CFrame = CFrame.new(-1210.02, 331.92, 3.47, 0.018, 0, 1, 0, 1, 0, -1, 0, 0.018)
+                        task.wait(0.5)
+                        root.CFrame = CFrame.new(123.28, 255.30, 1.05, 0.998, 0, -0.055, 0, 1, 0, 0.055, 0, 0.998)
+                        task.wait(0.5)
+                        root.CFrame = CFrame.new(17944.88, -130.16, -3492.70, -0.998, 0, -0.070, 0, 1, 0, 0.070, 0, -0.998)
+                        task.wait(0.5)
+                    end
+
+                    local rem = ReplicatedStorage:FindFirstChild("GeneralAbility")
+                    if rem and root then
+                        rem:FireServer(root.CFrame)
+                    end
+
+                    local pocket = nil
+                    local t = tick() + 10
+                    repeat
+                        task.wait(0.2)
+                        for _, v in ipairs(Workspace:GetChildren()) do
+                            if v:IsA("Model") and string.find(v.Name, "'s Pocket") then
+                                if v:FindFirstChildWhichIsA("ProximityPrompt", true) then
+                                    pocket = v
+                                    break
+                                end
+                            end
+                        end
+                    until pocket or tick() > t
+
+                    if pocket then
+                        local prompt = pocket:FindFirstChildWhichIsA("ProximityPrompt", true)
+                        if prompt then
+                            local parent = prompt.Parent
+                            root = gethrp()
+                            if root then
+                                if parent:IsA("BasePart") then
+                                    root.CFrame = parent.CFrame
+                                else
+                                    root.CFrame = pocket:GetPivot()
+                                end
+                            end
+                            
+                            task.wait(0.3)
+                            prompt.HoldDuration = 0
+                            prompt.MaxActivationDistance = 9999
+                            prompt.RequiresLineOfSight = false
+
+                            task.wait(0.1)
+                            fireproximityprompt(prompt)
+                            task.wait(0.2)
+                            fireproximityprompt(prompt)
+                            task.wait(2)
+                        end
+                    end
+
+                    local pad = nil
+                    t = tick() + 10
+                    repeat
+                        task.wait(0.2)
+                        if pocket and pocket:FindFirstChild("PocketKeypad") then
+                            pad = pocket.PocketKeypad
+                        else
+                            local rf = Workspace:FindFirstChild("RoomsFolder")
+                            if rf then
+                                for _, r in ipairs(rf:GetChildren()) do
+                                    if string.find(r.Name, "'s Room") and r:FindFirstChild("PocketKeypad") then
+                                        pad = r.PocketKeypad
+                                        break
+                                    end
+                                end
+                            end
+                        end
+                    until pad or tick() > t
+
+                    if pad and pad:FindFirstChild("Buttons") then
+                        local btns = pad.Buttons
+                        if btns:FindFirstChild("Reset") and btns.Reset:FindFirstChild("ClickDetector") then
+                            fireclickdetector(btns.Reset.ClickDetector)
+                            task.wait(0.3)
+                        end
+
+                        for i = 1, #code do
+                            local char = code:sub(i, i)
+                            local b = btns:FindFirstChild(char)
+                            if b and b:FindFirstChild("ClickDetector") then
+                                fireclickdetector(b.ClickDetector)
+                                task.wait(0.4)
+                            end
+                        end
+
+                        task.wait(0.3)
+                        if btns:FindFirstChild("Enter") and btns.Enter:FindFirstChild("ClickDetector") then
+                            fireclickdetector(btns.Enter.ClickDetector)
+                            task.wait(1)
+                        end
+                    end
+
+                    local function getPages()
+                        local bRoom = Workspace:FindFirstChild("BountyHunterRoom")
+                        if bRoom then
+                            local m = bRoom:FindFirstChild("BountyHunterMysteryRoom")
+                            if m and m:FindFirstChild("Pages") then
+                                for _, p in ipairs(m.Pages:GetChildren()) do
+                                    local cd = p:FindFirstChild("ClickDetector")
+                                    if cd then fireclickdetector(cd) end
+                                end
+                            end
+                        end
+
+                        for _, o in ipairs(Workspace:GetDescendants()) do
+                            if o.Name == "Pages" or string.find(o.Name:lower(), "page") then
+                                for _, p in ipairs(o:GetChildren()) do
+                                    local cd = p:FindFirstChild("ClickDetector")
+                                    if cd then fireclickdetector(cd) end
+                                end
+                            end
+                        end
+                    end
+
+                    getPages()
+                    task.wait(0.5)
+                    reset()
+                end
+
+            elseif game.PlaceId == 132277598079047 then
+                local folder = workspace:WaitForChild("Pages", 10)
+                if folder then
+                    for _, obj in ipairs(folder:GetChildren()) do
+                        if obj:FindFirstChild("Part") and obj.Part:FindFirstChildWhichIsA("ProximityPrompt") then
+                            local char = game.Players.LocalPlayer.Character or game.Players.LocalPlayer.CharacterAdded:Wait()
+                            local hrp = char:FindFirstChild("HumanoidRootPart")
+                            if hrp then
+                                hrp.CFrame = obj.Part.CFrame
+                                task.wait(0.2)
+                                fireproximityprompt(obj.Part.ProximityPrompt)
+                                task.wait(0.5)
+                            end
                         end
                     end
                 end
             end
-        until pad or tick() > t
-
-        if pad and pad:FindFirstChild("Buttons") then
-            local btns = pad.Buttons
-            if btns:FindFirstChild("Reset") and btns.Reset:FindFirstChild("ClickDetector") then
-                fireclickdetector(btns.Reset.ClickDetector)
-                task.wait(0.3)
-            end
-
-            for i = 1, #code do
-                local char = code:sub(i, i)
-                local b = btns:FindFirstChild(char)
-                if b and b:FindFirstChild("ClickDetector") then
-                    fireclickdetector(b.ClickDetector)
-                    task.wait(0.4)
-                end
-            end
-
-            task.wait(0.3)
-            if btns:FindFirstChild("Enter") and btns.Enter:FindFirstChild("ClickDetector") then
-                fireclickdetector(btns.Enter.ClickDetector)
-                task.wait(1)
-            end
-        end
-
-        local function getPages()
-            local bRoom = Workspace:FindFirstChild("BountyHunterRoom")
-            if bRoom then
-                local m = bRoom:FindFirstChild("BountyHunterMysteryRoom")
-                if m and m:FindFirstChild("Pages") then
-                    for _, p in ipairs(m.Pages:GetChildren()) do
-                        local cd = p:FindFirstChild("ClickDetector")
-                        if cd then fireclickdetector(cd) end
-                    end
-                end
-            end
-
-            for _, o in ipairs(Workspace:GetDescendants()) do
-                if o.Name == "Pages" or string.find(o.Name:lower(), "page") then
-                    for _, p in ipairs(o:GetChildren()) do
-                        local cd = p:FindFirstChild("ClickDetector")
-                        if cd then fireclickdetector(cd) end
-                    end
-                end
-            end
-        end
-
-        getPages()
-        task.wait(0.5)
-        reset()
-    end
-
-elseif game.PlaceId == 132277598079047 then
-    local folder = workspace:WaitForChild("Pages", 10)
-    if folder then
-        for _, obj in ipairs(folder:GetChildren()) do
-            if obj:FindFirstChild("Part") and obj.Part:FindFirstChildWhichIsA("ProximityPrompt") then
-                local char = game.Players.LocalPlayer.Character or game.Players.LocalPlayer.CharacterAdded:Wait()
-                local hrp = char:FindFirstChild("HumanoidRootPart")
-                if hrp then
-                    hrp.CFrame = obj.Part.CFrame
-                    task.wait(0.2)
-                    fireproximityprompt(obj.Part.ProximityPrompt)
-                    task.wait(0.5)
-                end
-            end
-        end
-    end
-end
+        end)
     end    
 })
-
---[[
-Name = <string> - The name of the button.
-Callback = <function> - Function executed when the button is pressed.
-]]
 
 OrionLib:Init()
