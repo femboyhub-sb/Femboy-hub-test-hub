@@ -170,6 +170,7 @@ Tab4:AddParagraph("Creators", "silentabsolutedayn")
 Tab4:AddParagraph("2nd creator", "nerna coder-zemboxosx")
 Tab4:AddParagraph("3rd creator", "deltarune_tomorrow")
 Tab4:AddParagraph("Thanks to..", "Nexer open sourced scripts and kindness!")
+Tab4:AddParagraph("Thanks to..", "Scripter for shellbert fix, huge appreciation!")
 
 -- ================= Funny =================
 local Tab5 = Window:MakeTab({
@@ -187,7 +188,7 @@ Tab5:AddButton({
 })
 -- ================= Tab 5 =================
 local Tab5 = Window:MakeTab({
-    Name = "Tab 5",
+    Name = "Useful",
     Icon = "rbxassetid://4483345998",
     PremiumOnly = false
 })
@@ -479,4 +480,40 @@ Tab5:AddButton({
     end    
 })
 
-OrionLib:Init()
+Tab1:AddButton({
+    Name = "Eggler for shellbert (1)",
+    Callback = function()
+        game:GetService("TeleportService"):Teleport(129665246576996)
+    end
+})
+
+-- Epilson Lorem Ipsum (Click Detector)
+Tab1:AddButton({
+    Name = "Eggler for shellbert (2)",
+    Callback = function()
+        local player = game.Players.LocalPlayer
+        local badgeQuestProgress = game:GetService("ReplicatedStorage").PlayerData[player.Name].BadgeQuestProgress
+        local questData = badgeQuestProgress.Value
+        
+        -- Parse the JSON data
+        local success, data = pcall(function()
+            return game:GetService("HttpService"):JSONDecode(questData)
+        end)
+        
+        if not success then
+            OrionLib:MakeNotification({
+                Name = "Error",
+                Content = "Failed to parse quest data",
+                Image = "rbxassetid://4483345998",
+                Time = 5
+            })
+            return
+        end
+        
+        -- Get the Easter Hunter quest data
+        local easterQuest = data["_questChainEasterHunter"]
+        
+        if easterQuest then
+            local completed = easterQuest.completed
+            local rewarded = easterQuest.rewarded
+            local collectedEg
