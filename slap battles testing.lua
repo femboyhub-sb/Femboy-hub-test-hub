@@ -12,7 +12,207 @@ local Workspace = game:GetService("Workspace")
 local lp = Players.LocalPlayer
 local placeId = game.PlaceId
 
-if placeId == 79885102123162 then
+if placeId == 106620300132058 then
+    local Window = OrionLib:MakeWindow({
+        Name = "Femboy Hub - Plate ID",
+        HidePremium = false,
+        SaveConfig = false,
+        ConfigFolder = "PlateConfig"
+    })
+
+    local Tab = Window:MakeTab({
+        Name = "Plate",
+        Icon = "rbxassetid://4483345998",
+        PremiumOnly = false
+    })
+
+    Tab:AddButton({
+        Name = "Plate",
+        Callback = function()
+            local RED_COLOR = Color3.fromRGB(255, 0, 0)
+
+            local function cleanAndNoclip()
+                local character = lp.Character
+                if not character then return end
+
+                for _, part in pairs(workspace:GetDescendants()) do
+                    if part:IsA("BasePart") then
+                        if part.Color == RED_COLOR then
+                            part:Destroy() 
+                        end
+                        
+                        if part:IsDescendantOf(character) then
+                            part.CanCollide = false
+                        end
+                    end
+                end
+            end
+
+            RunService.Stepped:Connect(cleanAndNoclip)
+        end
+    })
+
+    OrionLib:Init()
+
+elseif placeId == 7234087065 then
+    local Window = OrionLib:MakeWindow({
+        Name = "Femboy Hub - ID 7234087065",
+        HidePremium = false,
+        SaveConfig = false,
+        ConfigFolder = "CustomIDConfig"
+    })
+
+    local Tab = Window:MakeTab({
+        Name = "Fan & Riftshot",
+        Icon = "rbxassetid://4483345998",
+        PremiumOnly = false
+    })
+
+    Tab:AddButton({
+        Name = "Auto-Get Fan",
+        Callback = function()
+            local character = lp.Character or lp.CharacterAdded:Wait()
+            local HumanoidRootPart = character:WaitForChild("HumanoidRootPart")
+            
+            local function CreateMessage()
+                local msg = Instance.new("Message")
+                msg.Parent = workspace
+                return msg
+            end
+
+            local msg = CreateMessage()
+            msg.Text = "Getting Fan..."
+            
+            for i = 1, 50 do
+                HumanoidRootPart:PivotTo(workspace.QuestStuff.Key.CFrame)
+                task.wait()
+            end
+            task.wait(1.5)
+            game:GetService("ReplicatedStorage").RemoteEvents.SuitUpClown:FireServer()
+            task.wait(0.25)
+            game:GetService("ReplicatedStorage").RemoteEvents.KeyQuest:FireServer()
+            task.wait(0.25)
+            game:GetService("ReplicatedStorage").RemoteEvents.KeyAcquired:FireServer()
+            task.wait(0.25)
+            game:GetService("ReplicatedStorage").RemoteEvents.GOHOME:FireServer()
+            task.wait(0.25)
+            game:GetService("ReplicatedStorage").RemoteEvents.KeyBadgeReward:FireServer()
+            
+            if msg then msg:Destroy() end
+        end
+    })
+
+    Tab:AddButton({
+        Name = "Auto-Get Riftshot",
+        Callback = function()
+            game:GetService("Players").LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-260, 16, 477)
+            task.wait(0.8)
+            game:GetService("ReplicatedStorage").RemoteEvents.TargetPractice.OnComplete:FireServer() 
+            game:GetService("Players").LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-260, 16, 477)
+            task.wait(1)
+            game:GetService("ReplicatedStorage").RemoteEvents.TargetPractice.OnComplete:FireServer()
+        end
+    })
+
+    Tab:AddButton({
+        Name = "Auto Boxing Gloves",
+        Callback = function()
+            local targetCFrame = CFrame.new(
+                4231.91, 3505.89, 269.59, 
+                0.993, -0.000, 0.120, 
+                0.000, 1.000, 0.000, 
+                -0.120, -0.000, 0.993
+            )
+
+            local character = lp.Character or lp.CharacterAdded:Wait()
+            character:PivotTo(targetCFrame)
+
+            task.wait(1.5)
+
+            fireclickdetector(workspace.BoxingGloves.ClickDetector)
+        end
+    })
+
+    Tab:AddButton({
+        Name = "Auto-Get UTG",
+        Callback = function()
+            local targetCFrame = CFrame.new(
+                -1233.92, 9900.16, 704.24, 
+                0.936, -0.000, -0.352, 
+                0.000, 1.000, 0.000, 
+                0.352, -0.000, 0.936
+            )
+
+            if placeId == 115782629143468 then
+                local character = lp.Character or lp.CharacterAdded:Wait()
+                character:PivotTo(targetCFrame)
+            else
+                TeleportService:Teleport(115782629143468, lp)
+            end
+        end
+    })
+
+    Tab:AddButton({
+        Name = "Auto-Get Clock",
+        Callback = function()
+            local character = lp.Character or lp.CharacterAdded:Wait()
+            local HumanoidRootPart = character:WaitForChild("HumanoidRootPart")
+
+            local function CreateMessage()
+                local msg = Instance.new("Message")
+                msg.Parent = workspace
+                return msg
+            end
+
+            local msg = CreateMessage()
+            msg.Text = "Getting Clock..."
+            local tpdata = (queue_on_teleport or queueonteleport)
+            if tpdata then
+                tpdata((GlobalTPData or '') .. ' msg.Text = "Getting Clock..." for i=1,2 do for i,v in ipairs(workspace:GetDescendants()) do if v.ClassName == "ClickDetector" then fireclickdetector(v) end end task.wait(2.5) end while task.wait() do HumanoidRootPart:PivotTo(CFrame.new(26.34,4,-1.84)) end')
+            end
+            task.wait(.5)
+            while task.wait() do
+                if workspace:FindFirstChild("Buildings") and workspace.Buildings:FindFirstChild("wizard twoer") and workspace.Buildings["wizard twoer"]:FindFirstChild("Cone") then
+                    HumanoidRootPart:PivotTo(workspace.Buildings["wizard twoer"].Cone.CFrame * CFrame.new(0,15,0))
+                end
+            end
+        end
+    })
+
+    OrionLib:Init()
+
+elseif placeId == 115782629143468 then
+    local Window = OrionLib:MakeWindow({
+        Name = "Femboy Hub - UTG ID",
+        HidePremium = false,
+        SaveConfig = false,
+        ConfigFolder = "UTGConfig"
+    })
+
+    local Tab = Window:MakeTab({
+        Name = "UTG",
+        Icon = "rbxassetid://4483345998",
+        PremiumOnly = false
+    })
+
+    Tab:AddButton({
+        Name = "Auto-Get UTG",
+        Callback = function()
+            local targetCFrame = CFrame.new(
+                -1233.92, 9900.16, 704.24, 
+                0.936, -0.000, -0.352, 
+                0.000, 1.000, 0.000, 
+                0.352, -0.000, 0.936
+            )
+
+            local character = lp.Character or lp.CharacterAdded:Wait()
+            character:PivotTo(targetCFrame)
+        end
+    })
+
+    OrionLib:Init()
+
+elseif placeId == 79885102123162 then
     local Window = OrionLib:MakeWindow({
         Name = "Femboy Hub",
         HidePremium = false,
@@ -30,13 +230,6 @@ if placeId == 79885102123162 then
         Name = "Auto-Get Collector",
         Callback = function()
             task.spawn(function()
-                OrionLib:MakeNotification({
-                    Name = "Collector",
-                    Content = "Getting Collector...",
-                    Image = "rbxassetid://4483345998",
-                    Time = 5
-                })
-
                 local function touch(part)
                     if part and firetouchinterest then
                         local char = lp.Character
@@ -100,13 +293,6 @@ if placeId == 79885102123162 then
                         end
                     end
                 until BadgeService:UserHasBadgeAsync(lp.UserId, 1902849233175110)
-
-                OrionLib:MakeNotification({
-                    Name = "Collector",
-                    Content = "Collector Badge Obtained!",
-                    Image = "rbxassetid://4483345998",
-                    Time = 5
-                })
             end)
         end
     })
@@ -160,13 +346,6 @@ else
         ConfigFolder = "OrionTest"
     })
 
-    OrionLib:MakeNotification({
-        Name = "Scripts here are useful!",
-        Content = "Loaded successfully.",
-        Image = "rbxassetid://4483345998",
-        Time = 5
-    })
-
     local currentJob = game.JobId
     local req = (syn and syn.request) or (http and http.request) or http_request or request
 
@@ -195,9 +374,33 @@ else
     local Tab1 = Window:MakeTab({ Name = "Slap Battles Badges", Icon = "rbxassetid://4483345998" })
 
     Tab1:AddButton({
+        Name = "Plate",
+        Callback = function()
+            TeleportService:Teleport(106620300132058, lp)
+        end
+    })
+
+    Tab1:AddButton({
+        Name = "Brazil Badge",
+        Callback = function()
+            local char = lp.Character
+            if char and char:FindFirstChild("HumanoidRootPart") then
+                char.HumanoidRootPart.CFrame = CFrame.new(-1119.05, 309.54, -5.09, 0.039, -0.000, 0.999, -0.000, 1.000, 0.000, -0.999, -0.000, 0.039)
+            end
+        end
+    })
+
+    Tab1:AddButton({
         Name = "Collector (Teleport)",
         Callback = function()
             TeleportService:Teleport(79885102123162, lp)
+        end
+    })
+
+    Tab1:AddButton({
+        Name = "Auto UTG",
+        Callback = function()
+            TeleportService:Teleport(115782629143468, lp)
         end
     })
 
@@ -551,12 +754,6 @@ else
             local badgeQuestProgress = userFolder and userFolder:FindFirstChild("BadgeQuestProgress")
             
             if not badgeQuestProgress then
-                OrionLib:MakeNotification({
-                    Name = "Error",
-                    Content = "Quest data not found!",
-                    Image = "rbxassetid://4483345998",
-                    Time = 5
-                })
                 return
             end
 
@@ -566,12 +763,6 @@ else
             end)
             
             if not success or type(data) ~= "table" then
-                OrionLib:MakeNotification({
-                    Name = "Error",
-                    Content = "Failed to parse quest data",
-                    Image = "rbxassetid://4483345998",
-                    Time = 5
-                })
                 return
             end
             
@@ -586,52 +777,16 @@ else
                     local eggTp = Workspace:FindFirstChild("EggTeleport")
                     if eggTp and eggTp:FindFirstChild("ClickDetector") then
                         fireclickdetector(eggTp.ClickDetector)
-                    else
-                        OrionLib:MakeNotification({
-                            Name = "Error",
-                            Content = "EggTeleport not found in Workspace!",
-                            Image = "rbxassetid://4483345998",
-                            Time = 5
-                        })
                     end
                 end
 
                 if not completed and not rewarded then
-                    if collectedEggs < 10 then
-                        local eggsNeeded = 10 - collectedEggs
-                        OrionLib:MakeNotification({
-                            Name = "Easter Egg Hunter",
-                            Content = string.format("Need %d more eggs! (Owned: %d/10)", eggsNeeded, collectedEggs),
-                            Image = "rbxassetid://4483345998",
-                            Time = 5
-                        })
-                    elseif collectedEggs == 10 then
+                    if collectedEggs == 10 then
                         safeClick()
                     end
-                elseif completed and not rewarded then
-                    OrionLib:MakeNotification({
-                        Name = "Easter Egg Hunter",
-                        Content = "Claim Reward From Quest First",
-                        Image = "rbxassetid://4483345998",
-                        Time = 5
-                    })
-                elseif not completed and rewarded then
-                    OrionLib:MakeNotification({
-                        Name = "Easter Egg Hunter",
-                        Content = "Bug detected, please rejoin",
-                        Image = "rbxassetid://4483345998",
-                        Time = 5
-                    })
                 elseif completed and rewarded and collectedEggs == 10 then
                     safeClick()
                 end
-            else
-                OrionLib:MakeNotification({
-                    Name = "Error",
-                    Content = "Easter Hunter quest not found in data",
-                    Image = "rbxassetid://4483345998",
-                    Time = 5
-                })
             end
         end
     })
@@ -655,13 +810,6 @@ else
             
             if char and char:FindFirstChild("HumanoidRootPart") and targetGlove then
                 char.HumanoidRootPart.CFrame = targetGlove.CFrame
-            else
-                OrionLib:MakeNotification({
-                    Name = "Error",
-                    Content = "RewardGlove model not found in Workspace!",
-                    Image = "rbxassetid://4483345998",
-                    Time = 5
-                })
             end
         end
     })
@@ -923,108 +1071,101 @@ else
         end    
     })
 
-local Tab6 = Window:MakeTab({
-    Name = "Helper logic",
-    Icon = "rbxassetid://4483345998",
-    PremiumOnly = false
-})
+    local Tab7 = Window:MakeTab({
+        Name = "Helper logic",
+        Icon = "rbxassetid://4483345998",
+        PremiumOnly = false
+    })
 
---[[
-Name = <string> - The name of the tab.
-Icon = <string> - The icon of the tab.
-PremiumOnly = <bool> - Makes the tab accessible only to premium users.
-]]
+    local localPlayer = Players.LocalPlayer
 
-local Players = game:GetService("Players")
-local localPlayer = Players.LocalPlayer
+    _G.HelperAccountName = _G.HelperAccountName or ""
+    _G.RecipientAccountName = _G.RecipientAccountName or ""
+    _G.VoidTrackerActive = _G.VoidTrackerActive or false
 
-_G.HelperAccountName = _G.HelperAccountName or ""
-_G.RecipientAccountName = _G.RecipientAccountName or ""
-_G.VoidTrackerActive = _G.VoidTrackerActive or false
-
-if not _G.VoidTrackerActive then
-    _G.VoidTrackerActive = true
-    task.spawn(function()
-        while true do
-            task.wait(0.2)
-            if _G.HelperAccountName ~= "" and _G.RecipientAccountName ~= "" then
-                local helperObj = Players:FindFirstChild(_G.HelperAccountName)
-                local recipientObj = Players:FindFirstChild(_G.RecipientAccountName)
-                
-                if helperObj and recipientObj then
-                    local charH = helperObj.Character
-                    local charR = recipientObj.Character
+    if not _G.VoidTrackerActive then
+        _G.VoidTrackerActive = true
+        task.spawn(function()
+            while true do
+                task.wait(0.2)
+                if _G.HelperAccountName ~= "" and _G.RecipientAccountName ~= "" then
+                    local helperObj = Players:FindFirstChild(_G.HelperAccountName)
+                    local recipientObj = Players:FindFirstChild(_G.RecipientAccountName)
                     
-                    if charH and charR and charH:FindFirstChild("HumanoidRootPart") and charR:FindFirstChild("HumanoidRootPart") then
-                        local posH = charH.HumanoidRootPart.Position
-                        local posR = charR.HumanoidRootPart.Position
+                    if helperObj and recipientObj then
+                        local charH = helperObj.Character
+                        local charR = recipientObj.Character
                         
-                        if math.abs(posH.X) > 95000 and math.abs(posH.Z) > 95000 and math.abs(posR.X) > 95000 and math.abs(posR.Z) > 95000 then
-                            if localPlayer.Character and localPlayer.Character:FindFirstChildOfClass("Humanoid") then
-                                localPlayer.Character:FindFirstChildOfClass("Humanoid").Health = 0
-                                task.wait(5)
+                        if charH and charR and charH:FindFirstChild("HumanoidRootPart") and charR:FindFirstChild("HumanoidRootPart") then
+                            local posH = charH.HumanoidRootPart.Position
+                            local posR = charR.HumanoidRootPart.Position
+                            
+                            if math.abs(posH.X) > 95000 and math.abs(posH.Z) > 95000 and math.abs(posR.X) > 95000 and math.abs(posR.Z) > 95000 then
+                                if localPlayer.Character and localPlayer.Character:FindFirstChildOfClass("Humanoid") then
+                                    localPlayer.Character:FindFirstChildOfClass("Humanoid").Health = 0
+                                    task.wait(5)
+                                end
                             end
                         end
                     end
                 end
             end
-        end
-    end)
-end
-
-local function findAndTeleport(enteredText, roleType)
-    if enteredText == "" then return end
-    
-    local targetPlayer = nil
-    for _, p in pairs(Players:GetPlayers()) do
-        if p.Name:lower():find(enteredText:lower()) or p.DisplayName:lower():find(enteredText:lower()) then
-            targetPlayer = p
-            break
-        end
+        end)
     end
-    
-    if targetPlayer and targetPlayer.Name ~= localPlayer.Name then
-        if roleType == "Helper" then
-            _G.HelperAccountName = targetPlayer.Name
-            _G.RecipientAccountName = localPlayer.Name
-        elseif roleType == "Recipient" then
-            _G.RecipientAccountName = targetPlayer.Name
-            _G.HelperAccountName = localPlayer.Name
+
+    local function findAndTeleport(enteredText, roleType)
+        if enteredText == "" then return end
+        
+        local targetPlayer = nil
+        for _, p in pairs(Players:GetPlayers()) do
+            if p.Name:lower():find(enteredText:lower()) or p.DisplayName:lower():find(enteredText:lower()) then
+                targetPlayer = p
+                break
+            end
         end
         
-        local character = localPlayer.Character
-        if character then
-            local rootPart = character:WaitForChild("HumanoidRootPart", 5)
-            local humanoid = character:FindFirstChildOfClass("Humanoid")
-            if rootPart and humanoid then
-                humanoid.PlatformStand = true
-                task.wait(0.05)
-                rootPart.CFrame = CFrame.new(100000, 5000, 100000)
-                rootPart.AssemblyLinearVelocity = Vector3.new(0, 0, 0)
-                task.wait(0.1)
-                humanoid.PlatformStand = false
+        if targetPlayer and targetPlayer.Name ~= localPlayer.Name then
+            if roleType == "Helper" then
+                _G.HelperAccountName = targetPlayer.Name
+                _G.RecipientAccountName = localPlayer.Name
+            elseif roleType == "Recipient" then
+                _G.RecipientAccountName = targetPlayer.Name
+                _G.HelperAccountName = localPlayer.Name
+            end
+            
+            local character = localPlayer.Character
+            if character then
+                local rootPart = character:WaitForChild("HumanoidRootPart", 5)
+                local humanoid = character:FindFirstChildOfClass("Humanoid")
+                if rootPart and humanoid then
+                    humanoid.PlatformStand = true
+                    task.wait(0.05)
+                    rootPart.CFrame = CFrame.new(100000, 5000, 100000)
+                    rootPart.AssemblyLinearVelocity = Vector3.new(0, 0, 0)
+                    task.wait(0.1)
+                    humanoid.PlatformStand = false
+                end
             end
         end
     end
-end
 
-Tab6:AddTextbox({
-    Name = "Helper (Your alt name)",
-    Default = "",
-    TextDisappear = false,
-    Callback = function(text)
-        findAndTeleport(text, "Helper")
-    end
-})
+    Tab7:AddTextbox({
+        Name = "Helper (Your alt name)",
+        Default = "",
+        TextDisappear = false,
+        Callback = function(text)
+            findAndTeleport(text, "Helper")
+        end
+    })
 
-Tab6:AddTextbox({
-    Name = "Recipient (Your main account)",
-    Default = "",
-    TextDisappear = false,
-    Callback = function(text)
-        findAndTeleport(text, "Recipient")
-    end
-})
+    Tab7:AddTextbox({
+        Name = "Recipient (Your main account)",
+        Default = "",
+        TextDisappear = false,
+        Callback = function(text)
+            findAndTeleport(text, "Recipient")
+        end
+    })
     
     OrionLib:Init()
 end
