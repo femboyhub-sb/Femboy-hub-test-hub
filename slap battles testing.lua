@@ -1465,7 +1465,7 @@ Name = <string> - The name of the button.
 Callback = <function> - Function executed when the button is pressed.
 ]]
 
-Tab4:AddButton({
+Tab5:AddButton({
     Name = "Run Abuser",
     Callback = function()
         print("button pressed")
@@ -1478,7 +1478,7 @@ Name = <string> - The name of the button.
 Callback = <function> - Function executed when the button is pressed.
 ]]
 
-Tab4:AddButton({
+Tab5:AddButton({
     Name = "MR controller",
     Callback = function()
         print("button pressed")
@@ -1490,5 +1490,84 @@ loadstring(game:HttpGet("https://raw.githubusercontent.com/dihmuncher23-lang/Run
 Name = <string> - The name of the button.
 Callback = <function> - Function executed when the button is pressed.
 ]]
+
+Tab5:AddButton({
+    Name = "Barrel abuser",
+    Callback = function()
+        print("button pressed")
+loadstring(game:HttpGet("https://raw.githubusercontent.com/dihmuncher23-lang/Run-abuser/refs/heads/main/Barrel"))()
+    end    
+})
+
+--[[
+Name = <string> - The name of the button.
+Callback = <function> - Function executed when the button is pressed.
+]]
+
+Tab5:AddButton({
+    Name = "Virus abuser",
+    Callback = function()
+        print("button pressed")
+loadstring(game:HttpGet("https://raw.githubusercontent.com/dihmuncher23-lang/Run-abuser/refs/heads/main/VirusGlove"))()
+    end    
+})
+
+--[[
+Name = <string> - The name of the button.
+Callback = <function> - Function executed when the button is pressed.
+]]
+
+Tab5:AddButton({
+    Name = "Sparky controller",
+    Callback = function()
+        print("button pressed")
+loadstring(game:HttpGet("https://raw.githubusercontent.com/dihmuncher23-lang/Run-abuser/refs/heads/main/Sparky"))()
+    end    
+})
+
+--[[
+Name = <string> - The name of the button.
+Callback = <function> - Function executed when the button is pressed.
+]]
+
+Tab5:AddButton({
+    Name = "Gummy mastery abuser",
+    Callback = function()
+        print("button pressed")
+loadstring(game:HttpGet("https://raw.githubusercontent.com/dihmuncher23-lang/Run-abuser/refs/heads/main/Gummy"))()
+    end    
+})
+
+--[[
+Name = <string> - The name of the button.
+Callback = <function> - Function executed when the button is pressed.
+]]
+
+Tab5:AddButton({
+    Name = "Bus abuser",
+    Callback = function()
+        print("button pressed")
+loadstring(game:HttpGet("https://raw.githubusercontent.com/dihmuncher23-lang/Run-abuser/refs/heads/main/Bus"))()
+    end    
+})
+
+--[[
+Name = <string> - The name of the button.
+Callback = <function> - Function executed when the button is pressed.
+]]
+
+Tab5:AddButton({
+    Name = "Rob mastery abuser (do not quick transform)",
+    Callback = function()
+        print("button pressed")
+loadstring(game:HttpGet("https://raw.githubusercontent.com/dihmuncher23-lang/Run-abuser/refs/heads/main/Rob%20abuser"))()
+    end    
+})
+
+--[[
+Name = <string> - The name of the button.
+Callback = <function> - Function executed when the button is pressed.
+]]
+    
     OrionLib:Init()
 end
