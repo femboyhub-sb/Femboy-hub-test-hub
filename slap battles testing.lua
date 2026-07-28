@@ -1166,7 +1166,7 @@ else
             findAndTeleport(text, "Recipient")
         end
     })
-Tab6:AddButton({
+Tab4:AddButton({
     Name = "Brick fling assistant",
     Callback = function()
         print("button pressed")
@@ -1457,6 +1457,32 @@ RunService.Stepped:Connect(function()
     end
 end)
                 
+    end    
+})
+
+--[[
+Name = <string> - The name of the button.
+Callback = <function> - Function executed when the button is pressed.
+]]
+
+Tab4:AddButton({
+    Name = "Run Abuser",
+    Callback = function()
+        print("button pressed")
+loadstring(game:HttpGet("https://raw.githubusercontent.com/dihmuncher23-lang/Run-abuser/refs/heads/main/Run%20abuser"))()
+    end    
+})
+
+--[[
+Name = <string> - The name of the button.
+Callback = <function> - Function executed when the button is pressed.
+]]
+
+Tab4:AddButton({
+    Name = "MR controller",
+    Callback = function()
+        print("button pressed")
+loadstring(game:HttpGet("https://raw.githubusercontent.com/dihmuncher23-lang/Run-abuser/refs/heads/main/Cheeky"))()
     end    
 })
 
