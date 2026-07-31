@@ -1,4 +1,12 @@
-local Rayfield = loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
+local Rayfield
+local success, err = pcall(function()
+    Rayfield = loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
+end)
+
+if not success or not Rayfield then
+    warn("Ошибка при загрузке Rayfield UI: " .. tostring(err))
+    return
+end
 
 local Players = game:GetService("Players")
 local TeleportService = game:GetService("TeleportService")
@@ -26,31 +34,119 @@ if placeId == 128229958211947 then
         Name = "Auto-Get Shellbert",
         Callback = function()
             local char = lp.Character or lp.CharacterAdded:Wait()
-            local HumanoidRootPart = char:WaitForChild("HumanoidRootPart")
+            local HumanoidRootPart = char:WaitForChild("HumanoidRootPart", 5)
+
+            local remotes = ReplicatedStorage:WaitForChild("Remotes", 5)
+            if not remotes then return end
 
             for i = 1, 3 do
-                ReplicatedStorage:WaitForChild("Remotes"):WaitForChild("Cutscene"):WaitForChild("OnComplete"):FireServer("Scene1")
-                task.wait()
-                ReplicatedStorage:WaitForChild("Remotes"):WaitForChild("PhaseTransition"):WaitForChild("Switch"):FireServer()
-                task.wait()
-                ReplicatedStorage:WaitForChild("Remotes"):WaitForChild("PhaseTransition"):WaitForChild("Finished"):FireServer()
-                task.wait()
-                ReplicatedStorage:WaitForChild("Remotes"):WaitForChild("Cutscene"):WaitForChild("OnLoaded"):FireServer("Scene2")
-                task.wait()
-                ReplicatedStorage:WaitForChild("Remotes"):WaitForChild("Cutscene"):WaitForChild("OnComplete"):FireServer("Scene2")
-                task.wait()
-                ReplicatedStorage:WaitForChild("Remotes"):WaitForChild("GloveReward"):WaitForChild("Replicate"):FireServer()
-                task.wait()
+                pcall(function()
+                    remotes.Cutscene.OnComplete:FireServer("Scene1")
+                    task.wait(0.1)
+                    remotes.PhaseTransition.Switch:FireServer()
+                    task.wait(0.1)
+                    remotes.PhaseTransition.Finished:FireServer()
+                    task.wait(0.1)
+                    remotes.Cutscene.OnLoaded:FireServer("Scene2")
+                    task.wait(0.1)
+                    remotes.Cutscene.OnComplete:FireServer("Scene2")
+                    task.wait(0.1)
+                    remotes.GloveReward.Replicate:FireServer()
+                    task.wait(0.1)
+                end)
             end
 
             task.wait(2)
 
-            for i = 1, 50 do
-                if Workspace:FindFirstChild("RewardGlove") and Workspace.RewardGlove:FindFirstChild("RewardGlove") then
-                    HumanoidRootPart:PivotTo(Workspace.RewardGlove.RewardGlove.CFrame)
+            if HumanoidRootPart then
+                for i = 1, 50 do
+                    if Workspace:FindFirstChild("RewardGlove") and Workspace.RewardGlove:FindFirstChild("RewardGlove") then
+                        HumanoidRootPart:PivotTo(Workspace.RewardGlove.RewardGlove.CFrame)
+                    end
+                    task.wait(0.05)
                 end
-                task.wait()
             end
+        end
+    })
+
+elseif placeId == 129665246576996 then
+    local Window = Rayfield:CreateWindow({
+        Name = "Femboy Hub - Eggler",
+        LoadingTitle = "Femboy Hub",
+        LoadingSubtitle = "by silentabsolutedayn",
+        ConfigurationSaving = { Enabled = false }
+    })
+
+    local Tab = Window:CreateTab("Eggler", 4483345998)
+
+    Tab:CreateButton({
+        Name = "Auto-Get eggler",
+        Callback = function()
+            local char = lp.Character or lp.CharacterAdded:Wait()
+            local folder = workspace:FindFirstChild("TrialCompletedPoints")
+
+            if char and char:FindFirstChild("HumanoidRootPart") and folder then
+                local cf = char.HumanoidRootPart.CFrame
+                for i = 1, 3 do
+                    local trial = folder:FindFirstChild("Trial " .. i)
+                    if trial and trial:FindFirstChild("root") then
+                        trial.root.CFrame = cf
+                    end
+                end
+            end
+        end
+    })
+
+    Tab:CreateButton({
+        Name = "Auto-Get Shellbert",
+        Callback = function()
+            local tpdata = (queue_on_teleport or queueonteleport)
+            local code = [[
+                for i=1,3 do 
+                    game:GetService("ReplicatedStorage"):WaitForChild("Remotes"):WaitForChild("Cutscene"):WaitForChild("OnComplete"):FireServer("Scene1") 
+                    task.wait(0.1) 
+                    game:GetService("ReplicatedStorage"):WaitForChild("Remotes"):WaitForChild("PhaseTransition"):WaitForChild("Switch"):FireServer() 
+                    task.wait(0.1) 
+                    game:GetService("ReplicatedStorage"):WaitForChild("Remotes"):WaitForChild("PhaseTransition"):WaitForChild("Finished"):FireServer() 
+                    task.wait(0.1) 
+                    game:GetService("ReplicatedStorage"):WaitForChild("Remotes"):WaitForChild("Cutscene"):WaitForChild("OnLoaded"):FireServer("Scene2") 
+                    task.wait(0.1) 
+                    game:GetService("ReplicatedStorage"):WaitForChild("Remotes"):WaitForChild("Cutscene"):WaitForChild("OnComplete"):FireServer("Scene2") 
+                    task.wait(0.1) 
+                    game:GetService("ReplicatedStorage"):WaitForChild("Remotes"):WaitForChild("GloveReward"):WaitForChild("Replicate"):FireServer() 
+                    task.wait(0.1) 
+                end 
+                task.wait(2) 
+                local char = game:GetService("Players").LocalPlayer.Character
+                if char and char:FindFirstChild("HumanoidRootPart") then
+                    for i=1,50 do 
+                        if workspace:FindFirstChild("RewardGlove") then
+                            char.HumanoidRootPart:PivotTo(workspace.RewardGlove.RewardGlove.CFrame) 
+                        end
+                        task.wait(0.05)
+                    end 
+                end
+            ]]
+
+            if tpdata then
+                pcall(function()
+                    tpdata((GlobalTPData or "") .. code)
+                end)
+            end
+
+            task.spawn(function()
+                local remotes = ReplicatedStorage:WaitForChild("Remotes", 5)
+                if not remotes then return end
+
+                for i = 1, 50 do
+                    pcall(function()
+                        remotes.FourthTrialTeleport:FireServer()
+                        remotes.InviteFriends.PlayWithParty:FireServer()
+                        remotes.InviteFriends.CancelPartyTeleport:FireServer()
+                    end)
+                    task.wait(0.2)
+                end
+            end)
         end
     })
 
@@ -76,7 +172,7 @@ elseif placeId == 106620300132058 then
                 for _, part in pairs(workspace:GetDescendants()) do
                     if part:IsA("BasePart") then
                         if part.Color == RED_COLOR then
-                            part:Destroy() 
+                            pcall(function() part:Destroy() end) 
                         end
                         
                         if part:IsDescendantOf(character) then
@@ -104,45 +200,51 @@ elseif placeId == 7234087065 then
         Name = "Auto-Get Fan",
         Callback = function()
             local character = lp.Character or lp.CharacterAdded:Wait()
-            local HumanoidRootPart = character:WaitForChild("HumanoidRootPart")
-            
-            local function CreateMessage()
-                local msg = Instance.new("Message")
-                msg.Parent = workspace
-                return msg
-            end
+            local HumanoidRootPart = character:WaitForChild("HumanoidRootPart", 5)
+            if not HumanoidRootPart then return end
 
-            local msg = CreateMessage()
-            msg.Text = "Getting Fan..."
-            
             for i = 1, 50 do
-                HumanoidRootPart:PivotTo(workspace.QuestStuff.Key.CFrame)
-                task.wait()
+                if workspace:FindFirstChild("QuestStuff") and workspace.QuestStuff:FindFirstChild("Key") then
+                    HumanoidRootPart:PivotTo(workspace.QuestStuff.Key.CFrame)
+                end
+                task.wait(0.02)
             end
             task.wait(1.5)
-            game:GetService("ReplicatedStorage").RemoteEvents.SuitUpClown:FireServer()
-            task.wait(0.25)
-            game:GetService("ReplicatedStorage").RemoteEvents.KeyQuest:FireServer()
-            task.wait(0.25)
-            game:GetService("ReplicatedStorage").RemoteEvents.KeyAcquired:FireServer()
-            task.wait(0.25)
-            game:GetService("ReplicatedStorage").RemoteEvents.GOHOME:FireServer()
-            task.wait(0.25)
-            game:GetService("ReplicatedStorage").RemoteEvents.KeyBadgeReward:FireServer()
-            
-            if msg then msg:Destroy() end
+
+            local remotes = ReplicatedStorage:FindFirstChild("RemoteEvents")
+            if remotes then
+                pcall(function()
+                    remotes.SuitUpClown:FireServer()
+                    task.wait(0.25)
+                    remotes.KeyQuest:FireServer()
+                    task.wait(0.25)
+                    remotes.KeyAcquired:FireServer()
+                    task.wait(0.25)
+                    remotes.GOHOME:FireServer()
+                    task.wait(0.25)
+                    remotes.KeyBadgeReward:FireServer()
+                end)
+            end
         end
     })
 
     Tab:CreateButton({
         Name = "Auto-Get Riftshot",
         Callback = function()
-            game:GetService("Players").LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-260, 16, 477)
-            task.wait(0.8)
-            game:GetService("ReplicatedStorage").RemoteEvents.TargetPractice.OnComplete:FireServer() 
-            game:GetService("Players").LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-260, 16, 477)
-            task.wait(1)
-            game:GetService("ReplicatedStorage").RemoteEvents.TargetPractice.OnComplete:FireServer()
+            pcall(function()
+                if lp.Character and lp.Character:FindFirstChild("HumanoidRootPart") then
+                    lp.Character.HumanoidRootPart.CFrame = CFrame.new(-260, 16, 477)
+                    task.wait(0.8)
+                    if ReplicatedStorage:FindFirstChild("RemoteEvents") and ReplicatedStorage.RemoteEvents:FindFirstChild("TargetPractice") then
+                        ReplicatedStorage.RemoteEvents.TargetPractice.OnComplete:FireServer() 
+                    end
+                    lp.Character.HumanoidRootPart.CFrame = CFrame.new(-260, 16, 477)
+                    task.wait(1)
+                    if ReplicatedStorage:FindFirstChild("RemoteEvents") and ReplicatedStorage.RemoteEvents:FindFirstChild("TargetPractice") then
+                        ReplicatedStorage.RemoteEvents.TargetPractice.OnComplete:FireServer()
+                    end
+                end
+            end)
         end
     })
 
@@ -161,7 +263,9 @@ elseif placeId == 7234087065 then
 
             task.wait(1.5)
 
-            fireclickdetector(workspace.BoxingGloves.ClickDetector)
+            if workspace:FindFirstChild("BoxingGloves") and workspace.BoxingGloves:FindFirstChild("ClickDetector") then
+                fireclickdetector(workspace.BoxingGloves.ClickDetector)
+            end
         end
     })
 
@@ -188,22 +292,19 @@ elseif placeId == 7234087065 then
         Name = "Auto-Get Clock",
         Callback = function()
             local character = lp.Character or lp.CharacterAdded:Wait()
-            local HumanoidRootPart = character:WaitForChild("HumanoidRootPart")
+            local HumanoidRootPart = character:WaitForChild("HumanoidRootPart", 5)
+            if not HumanoidRootPart then return end
 
-            local function CreateMessage()
-                local msg = Instance.new("Message")
-                msg.Parent = workspace
-                return msg
-            end
-
-            local msg = CreateMessage()
-            msg.Text = "Getting Clock..."
             local tpdata = (queue_on_teleport or queueonteleport)
             if tpdata then
-                tpdata((GlobalTPData or '') .. ' msg.Text = "Getting Clock..." for i=1,2 do for i,v in ipairs(workspace:GetDescendants()) do if v.ClassName == "ClickDetector" then fireclickdetector(v) end end task.wait(2.5) end while task.wait() do HumanoidRootPart:PivotTo(CFrame.new(26.34,4,-1.84)) end')
+                pcall(function()
+                    tpdata((GlobalTPData or '') .. ' for i=1,2 do for i,v in ipairs(workspace:GetDescendants()) do if v.ClassName == "ClickDetector" then fireclickdetector(v) end end task.wait(2.5) end while task.wait() do game:GetService("Players").LocalPlayer.Character.HumanoidRootPart:PivotTo(CFrame.new(26.34,4,-1.84)) end')
+                end)
             end
             task.wait(.5)
-            while task.wait() do
+            
+            for i = 1, 100 do
+                task.wait(0.1)
                 if workspace:FindFirstChild("Buildings") and workspace.Buildings:FindFirstChild("wizard twoer") and workspace.Buildings["wizard twoer"]:FindFirstChild("Cone") then
                     HumanoidRootPart:PivotTo(workspace.Buildings["wizard twoer"].Cone.CFrame * CFrame.new(0,15,0))
                 end
@@ -626,106 +727,109 @@ else
             local rsanswrr
             repeat 
                 task.wait() 
-                ReplicatedStorage.RecallReset:FireServer(nil, true) 
-                rsanswrr = ReplicatedStorage.RecallLastInteractionSteps:InvokeServer(false) 
+                if ReplicatedStorage:FindFirstChild("RecallReset") then
+                    ReplicatedStorage.RecallReset:FireServer(nil, true) 
+                end
+                if ReplicatedStorage:FindFirstChild("RecallLastInteractionSteps") then
+                    rsanswrr = ReplicatedStorage.RecallLastInteractionSteps:InvokeServer(false) 
+                end
             until rsanswrr == "Simon says walk through the portal to collect your reward"
             task.wait(2) 
-            lp.Character.HumanoidRootPart:PivotTo(Workspace.RepressedMemories.Portal.CFrame)
+            if lp.Character and lp.Character:FindFirstChild("HumanoidRootPart") and Workspace:FindFirstChild("RepressedMemories") then
+                lp.Character.HumanoidRootPart:PivotTo(Workspace.RepressedMemories.Portal.CFrame)
+            end
         end
     })
 
     Tab1:CreateButton({
         Name = "Poltergeist (ONLY HALLOWEEN)",
         Callback = function()
-            loadstring(game:HttpGet("https://raw.githubusercontent.com/nerna-coder/Poltergeist/refs/heads/main/Slap%20battles.lua"))()
+            pcall(function()
+                loadstring(game:HttpGet("https://raw.githubusercontent.com/nerna-coder/Poltergeist/refs/heads/main/Slap%20battles.lua"))()
+            end)
         end    
     })
 
     Tab1:CreateButton({
         Name = "Instant ice skate",
         Callback = function()
-            ReplicatedStorage.IceSkate:FireServer("Freeze")
+            if ReplicatedStorage:FindFirstChild("IceSkate") then
+                ReplicatedStorage.IceSkate:FireServer("Freeze")
+            end
         end    
     })
 
     Tab1:CreateButton({
         Name = "Instant lamp",
         Callback = function()
-            local Event = ReplicatedStorage.nightmare
-            local equip = debug.getupvalues(require(ReplicatedStorage.BACKEND.Lib.Network).fireServer)[3]("SelectGlove")
-            equip:FireServer("ZZZZZZZ")
-            task.wait(0.5)
-            for i = 35, 120 do
-                Event:FireServer("LightBroken")
-                task.wait(0.05)
-            end
+            pcall(function()
+                local Event = ReplicatedStorage:FindFirstChild("nightmare")
+                if Event then
+                    for i = 35, 120 do
+                        Event:FireServer("LightBroken")
+                        task.wait(0.05)
+                    end
+                end
+            end)
         end    
     })
 
     Tab1:CreateButton({
         Name = "Auto 250 and Disarm (bubble) uses kill helper!",
         Callback = function()
-            loadstring(game:HttpGet("https://raw.githubusercontent.com/Thiago3246/KillstreakHelper/main/Source.luau"))()
+            pcall(function()
+                loadstring(game:HttpGet("https://raw.githubusercontent.com/Thiago3246/KillstreakHelper/main/Source.luau"))()
+            end)
         end    
     })
 
     Tab1:CreateButton({
         Name = "Auto Bob (75k+ slaps)",
         Callback = function()
-            local equip = debug.getupvalues(require(ReplicatedStorage.BACKEND.Lib.Network).fireServer)[3]("SelectGlove")
-            equip:FireServer("God's Hand")
-            task.wait(0.5)
-            ReplicatedStorage.TimestopJump:FireServer()
-            ReplicatedStorage.Timestopchoir:FireServer()
-            ReplicatedStorage.Timestop:FireServer()
-            task.wait(0.1)
-            equip:FireServer("Replica")
-            task.wait(0.5)
-            local hrp = lp.Character:WaitForChild("HumanoidRootPart")
-            hrp.CFrame = CFrame.new(-1210.05, 328.22, 2.48, 0.748, -0.000, 0.664, -0.000, 1.000, 0.000, -0.664, -0.000, 0.748)
-            task.wait(2)
-            local DuplicateEvent = ReplicatedStorage.Duplicate
-            for i = 1, 150000 do
-                DuplicateEvent:FireServer(true)
-                if i % 100 == 0 then
-                    task.wait()
+            pcall(function()
+                local DuplicateEvent = ReplicatedStorage:FindFirstChild("Duplicate")
+                if DuplicateEvent then
+                    for i = 1, 150000 do
+                        DuplicateEvent:FireServer(true)
+                        if i % 100 == 0 then
+                            task.wait()
+                        end
+                    end
                 end
-            end
-            task.wait(1)
-            hop()
+                task.wait(1)
+                hop()
+            end)
         end    
     })
 
     Tab1:CreateButton({
         Name = "Instnat firework. Player 1 (helper)",
         Callback = function()
-            ReplicatedStorage:WaitForChild("GeneralAbility"):FireServer()
+            if ReplicatedStorage:FindFirstChild("GeneralAbility") then
+                ReplicatedStorage.GeneralAbility:FireServer()
+            end
             task.wait(0.2)
-            lp.Character.HumanoidRootPart.CFrame = CFrame.new(-1210.05, 328.22, 2.48, 0.748, -0.000, 0.664, -0.000, 1.000, 0.000, -0.664, -0.000, 0.748)
+            if lp.Character and lp.Character:FindFirstChild("HumanoidRootPart") then
+                lp.Character.HumanoidRootPart.CFrame = CFrame.new(-1210.05, 328.22, 2.48, 0.748, -0.000, 0.664, -0.000, 1.000, 0.000, -0.664, -0.000, 0.748)
+            end
         end    
     })
 
     Tab1:CreateButton({
         Name = "Instant Firework. Player 2 (main acc)",
         Callback = function()
-            local hrp = lp.Character:WaitForChild("HumanoidRootPart")
+            local hrp = lp.Character and lp.Character:FindFirstChild("HumanoidRootPart")
+            if not hrp then return end
             hrp.CFrame = CFrame.new(-1210.05, 328.22, 2.48, 0.748, -0.000, 0.664, -0.000, 1.000, 0.000, -0.664, -0.000, 0.748)
             task.wait(0.3)
-            ReplicatedStorage.Firework:InvokeServer()
-            ReplicatedStorage.AlchemistEvent:FireServer("AddItem", "Cake Mix")
-            task.wait(0.1)
-            ReplicatedStorage.AlchemistEvent:FireServer("EquipItem", "Cake Mix")
-            task.wait(0.5)
-            local ovenModel = Workspace:FindFirstChild("Cube", true)
-            if ovenModel then
-                if ovenModel:IsA("Model") and ovenModel.PrimaryPart then
-                    hrp.CFrame = ovenModel.PrimaryPart.CFrame * CFrame.new(0, 0, -3)
-                elseif ovenModel:IsA("BasePart") then
-                    hrp.CFrame = ovenModel.CFrame * CFrame.new(0, 3, 0)
+            pcall(function()
+                if ReplicatedStorage:FindFirstChild("Firework") then ReplicatedStorage.Firework:InvokeServer() end
+                if ReplicatedStorage:FindFirstChild("AlchemistEvent") then
+                    ReplicatedStorage.AlchemistEvent:FireServer("AddItem", "Cake Mix")
+                    task.wait(0.1)
+                    ReplicatedStorage.AlchemistEvent:FireServer("EquipItem", "Cake Mix")
                 end
-            else
-                hrp.CFrame = CFrame.new(-1210.05, 328.22, 2.48, 0.748, -0.000, 0.664, -0.000, 1.000, 0.000, -0.664, -0.000, 0.748)
-            end
+            end)
         end    
     })
 
@@ -734,7 +838,7 @@ else
         Callback = function()
             local function target(v)
                 if v:IsA("BasePart") and v.Color == Color3.fromRGB(255, 0, 0) then
-                    v:Destroy()
+                    pcall(function() v:Destroy() end)
                 end
             end
             for _, v in Workspace:GetDescendants() do target(v) end
@@ -754,14 +858,18 @@ else
     Tab1:CreateButton({
         Name = "Insta Lotus (disable verify teleports!)",
         Callback = function()
-            loadstring(game:HttpGet('https://pastefy.app/Ds8bqkE9/raw'))()
+            pcall(function()
+                loadstring(game:HttpGet('https://pastefy.app/Ds8bqkE9/raw'))()
+            end)
         end    
     })
 
     Tab1:CreateButton({
         Name = "Auto get doorkeeper (disable verify teleports!)",
         Callback = function()
-            loadstring(game:HttpGet('https://pastefy.app/zbj5RgPl/raw'))()
+            pcall(function()
+                loadstring(game:HttpGet('https://pastefy.app/zbj5RgPl/raw'))()
+            end)
         end    
     })
 
@@ -770,14 +878,18 @@ else
     Tab3:CreateButton({
         Name = "Nexer slap farm v2 (OP!)",
         Callback = function()
-            loadstring(game:HttpGet("https://raw.githubusercontent.com/NewNexer/NexerHub/refs/heads/main/SB/SFs/SFComponents%3D2.0EGRR.luau"))()
+            pcall(function()
+                loadstring(game:HttpGet("https://raw.githubusercontent.com/NewNexer/NexerHub/refs/heads/main/SB/SFs/SFComponents%3D2.0EGRR.luau"))()
+            end)
         end    
     })
 
     Tab3:CreateButton({
         Name = "St1mlx mastery helper (key)",
         Callback = function()
-            loadstring(game:HttpGet('https://raw.githubusercontent.com/st1mlx/bebebe/refs/heads/main/SBHub'))()
+            pcall(function()
+                loadstring(game:HttpGet('https://raw.githubusercontent.com/st1mlx/bebebe/refs/heads/main/SBHub'))()
+            end)
         end    
     })
 
@@ -788,287 +900,6 @@ else
     Tab4:CreateParagraph({Title = "3rd creator", Content = "deltarune_tomorrow"})
     Tab4:CreateParagraph({Title = "Thanks to..", Content = "Nexer open sourced scripts and kindness!"})
     Tab4:CreateParagraph({Title = "Thanks to..", Content = "Scripter for shellbert fix, huge appreciation!"})
-
-    Tab4:CreateButton({
-        Name = "Brick fling assistant",
-        Callback = function()
-            local CoreGui = game:GetService("CoreGui")
-            local pgui = lp:FindFirstChildOfClass("PlayerGui")
-            local parent = (pcall(function() return CoreGui.Name end) and CoreGui) or pgui
-
-            local sg = Instance.new("ScreenGui")
-            sg.Name = "LegoBrickFlingGui"
-            sg.ResetOnSpawn = false
-            sg.Parent = parent
-
-            local frame = Instance.new("Frame")
-            frame.Size = UDim2.new(0, 240, 0, 275)
-            frame.Position = UDim2.new(0.5, -120, 0.5, -137)
-            frame.BackgroundColor3 = Color3.fromRGB(35, 35, 40)
-            frame.BorderSizePixel = 0
-            frame.Active = true
-            frame.Draggable = true
-            frame.Parent = sg
-
-            local corner = Instance.new("UICorner")
-            corner.CornerRadius = UDim.new(0, 12)
-            corner.Parent = frame
-
-            local stroke = Instance.new("UIStroke")
-            stroke.Color = Color3.fromRGB(80, 80, 90)
-            stroke.Thickness = 2
-            stroke.Parent = frame
-
-            local title = Instance.new("TextLabel")
-            title.Size = UDim2.new(1, -40, 0, 30)
-            title.Position = UDim2.new(0, 15, 0, 5)
-            title.BackgroundTransparency = 1
-            title.TextColor3 = Color3.fromRGB(255, 255, 255)
-            title.Font = Enum.Font.SourceSansBold
-            title.TextSize = 16
-            title.TextXAlignment = Enum.TextXAlignment.Left
-            title.Text = "Lego Brick Helper"
-            title.Parent = frame
-
-            local close = Instance.new("TextButton")
-            close.Size = UDim2.new(0, 24, 0, 24)
-            close.Position = UDim2.new(1, -30, 0, 8)
-            close.BackgroundColor3 = Color3.fromRGB(220, 60, 60)
-            close.TextColor3 = Color3.fromRGB(255, 255, 255)
-            close.Font = Enum.Font.SourceSansBold
-            close.TextSize = 14
-            close.Text = "X"
-            close.Parent = frame
-
-            local closeCorner = Instance.new("UICorner")
-            closeCorner.CornerRadius = UDim.new(0, 6)
-            closeCorner.Parent = close
-
-            local btnSpawn = Instance.new("TextButton")
-            btnSpawn.Size = UDim2.new(1, -30, 0, 35)
-            btnSpawn.Position = UDim2.new(0, 15, 0, 40)
-            btnSpawn.BackgroundColor3 = Color3.fromRGB(60, 60, 70)
-            btnSpawn.TextColor3 = Color3.fromRGB(255, 255, 255)
-            btnSpawn.Font = Enum.Font.SourceSansBold
-            btnSpawn.TextSize = 14
-            btnSpawn.Text = "Spawn Brick"
-            btnSpawn.Parent = frame
-
-            local btnSpawnCorner = Instance.new("UICorner")
-            btnSpawnCorner.CornerRadius = UDim.new(0, 6)
-            btnSpawnCorner.Parent = btnSpawn
-
-            local btnFling = Instance.new("TextButton")
-            btnFling.Size = UDim2.new(1, -30, 0, 35)
-            btnFling.Position = UDim2.new(0, 15, 0, 85)
-            btnFling.BackgroundColor3 = Color3.fromRGB(45, 125, 45)
-            btnFling.TextColor3 = Color3.fromRGB(255, 255, 255)
-            btnFling.Font = Enum.Font.SourceSansBold
-            btnFling.TextSize = 14
-            btnFling.Text = "Fling Aura: OFF"
-            btnFling.Parent = frame
-
-            local btnFlingCorner = Instance.new("UICorner")
-            btnFlingCorner.CornerRadius = UDim.new(0, 6)
-            btnFlingCorner.Parent = btnFling
-
-            local nameBox = Instance.new("TextBox")
-            nameBox.Size = UDim2.new(1, -30, 0, 35)
-            nameBox.Position = UDim2.new(0, 15, 0, 130)
-            nameBox.BackgroundColor3 = Color3.fromRGB(25, 25, 30)
-            nameBox.TextColor3 = Color3.fromRGB(255, 255, 255)
-            nameBox.Font = Enum.Font.SourceSans
-            nameBox.TextSize = 14
-            nameBox.Text = ""
-            nameBox.PlaceholderText = "Enter player name..."
-            nameBox.ClearTextOnFocus = false
-            nameBox.Parent = frame
-
-            local nameBoxCorner = Instance.new("UICorner")
-            nameBoxCorner.CornerRadius = UDim.new(0, 6)
-            nameBoxCorner.Parent = nameBox
-
-            local btnAimbot = Instance.new("TextButton")
-            btnAimbot.Size = UDim2.new(1, -30, 0, 35)
-            btnAimbot.Position = UDim2.new(0, 15, 0, 175)
-            btnAimbot.BackgroundColor3 = Color3.fromRGB(45, 45, 50)
-            btnAimbot.TextColor3 = Color3.fromRGB(255, 255, 255)
-            btnAimbot.Font = Enum.Font.SourceSansBold
-            btnAimbot.TextSize = 14
-            btnAimbot.Text = "Aimbot Target: OFF"
-            btnAimbot.Parent = frame
-
-            local btnAimbotCorner = Instance.new("UICorner")
-            btnAimbotCorner.CornerRadius = UDim.new(0, 6)
-            btnAimbotCorner.Parent = btnAimbot
-
-            local sliderFrame = Instance.new("Frame")
-            sliderFrame.Size = UDim2.new(1, -30, 0, 40)
-            sliderFrame.Position = UDim2.new(0, 15, 0, 220)
-            sliderFrame.BackgroundTransparency = 1
-            sliderFrame.Parent = frame
-
-            local sliderLabel = Instance.new("TextLabel")
-            sliderLabel.Size = UDim2.new(1, 0, 0, 15)
-            sliderLabel.Position = UDim2.new(0, 0, 0, 0)
-            sliderLabel.BackgroundTransparency = 1
-            sliderLabel.TextColor3 = Color3.fromRGB(200, 200, 200)
-            sliderLabel.Font = Enum.Font.SourceSansBold
-            sliderLabel.TextSize = 12
-            sliderLabel.TextXAlignment = Enum.TextXAlignment.Left
-            sliderLabel.Text = "Rotational Power: 5000"
-            sliderLabel.Parent = sliderFrame
-
-            local sliderBackground = Instance.new("Frame")
-            sliderBackground.Size = UDim2.new(1, 0, 0, 6)
-            sliderBackground.Position = UDim2.new(0, 0, 0, 22)
-            sliderBackground.BackgroundColor3 = Color3.fromRGB(50, 50, 55)
-            sliderBackground.BorderSizePixel = 0
-            sliderBackground.Parent = sliderFrame
-
-            local sliderBackgroundCorner = Instance.new("UICorner")
-            sliderBackgroundCorner.CornerRadius = UDim.new(0, 3)
-            sliderBackgroundCorner.Parent = sliderBackground
-
-            local sliderFill = Instance.new("Frame")
-            sliderFill.Size = UDim2.new(0.5, 0, 1, 0)
-            sliderFill.BackgroundColor3 = Color3.fromRGB(0, 150, 255)
-            sliderFill.BorderSizePixel = 0
-            sliderFill.Parent = sliderBackground
-
-            local sliderFillCorner = Instance.new("UICorner")
-            sliderFillCorner.CornerRadius = UDim.new(0, 3)
-            sliderFillCorner.Parent = sliderFill
-
-            local sliderButton = Instance.new("TextButton")
-            sliderButton.Size = UDim2.new(0, 14, 0, 14)
-            sliderButton.Position = UDim2.new(0.5, -7, 0.5, -7)
-            sliderButton.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-            sliderButton.Text = ""
-            sliderButton.Parent = sliderBackground
-
-            local sliderButtonCorner = Instance.new("UICorner")
-            sliderButtonCorner.CornerRadius = UDim.new(1, 0)
-            sliderButtonCorner.Parent = sliderButton
-
-            local flingActive = false
-            local aimbotActive = false
-            local flingPower = 5000
-            local minPower = 0
-            local maxPower = 20000
-            local lbrickEvent = ReplicatedStorage:WaitForChild("lbrick")
-
-            btnSpawn.MouseButton1Click:Connect(function()
-                lbrickEvent:FireServer()
-            end)
-
-            btnFling.MouseButton1Click:Connect(function()
-                flingActive = not flingActive
-                if flingActive then
-                    btnFling.Text = "Fling Aura: ON"
-                    btnFling.BackgroundColor3 = Color3.fromRGB(125, 45, 45)
-                else
-                    btnFling.Text = "Fling Aura: OFF"
-                    btnFling.BackgroundColor3 = Color3.fromRGB(45, 125, 45)
-                end
-            end)
-
-            btnAimbot.MouseButton1Click:Connect(function()
-                aimbotActive = not aimbotActive
-                if aimbotActive then
-                    btnAimbot.Text = "Aimbot Target: ON"
-                    btnAimbot.BackgroundColor3 = Color3.fromRGB(0, 100, 200)
-                else
-                    btnAimbot.Text = "Aimbot Target: OFF"
-                    btnAimbot.BackgroundColor3 = Color3.fromRGB(45, 45, 50)
-                end
-            end)
-
-            close.MouseButton1Click:Connect(function()
-                flingActive = false
-                aimbotActive = false
-                sg:Destroy()
-            end)
-
-            local isSliding = false
-
-            local function updateSlider(input)
-                local percentage = math.clamp((input.Position.X - sliderBackground.AbsolutePosition.X) / sliderBackground.AbsoluteSize.X, 0, 1)
-                sliderFill.Size = UDim2.new(percentage, 0, 1, 0)
-                sliderButton.Position = UDim2.new(percentage, -7, 0.5, -7)
-                flingPower = math.round(minPower + (percentage * (maxPower - minPower)))
-                sliderLabel.Text = "Rotational Power: " .. tostring(flingPower)
-            end
-
-            sliderButton.InputBegan:Connect(function(input)
-                if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
-                    isSliding = true
-                end
-            end)
-
-            UserInputService.InputEnded:Connect(function(input)
-                if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
-                    isSliding = false
-                end
-            end)
-
-            UserInputService.InputChanged:Connect(function(input)
-                if isSliding and (input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch) then
-                    updateSlider(input)
-                end
-            end)
-
-            local percentage = (flingPower - minPower) / (maxPower - minPower)
-            sliderFill.Size = UDim2.new(percentage, 0, 1, 0)
-            sliderButton.Position = UDim2.new(percentage, -7, 0.5, -7)
-
-            local function getTargetPlayer()
-                local text = nameBox.Text:lower()
-                if text == "" then return nil end
-                
-                for _, p in pairs(Players:GetPlayers()) do
-                    if p ~= lp and (p.Name:lower():sub(1, #text) == text or p.DisplayName:lower():sub(1, #text) == text) then
-                        return p
-                    end
-                end
-                return nil
-            end
-
-            RunService.Stepped:Connect(function()
-                if not flingActive then return end
-                
-                local brick = workspace:FindFirstChild("Union")
-                if not brick or not brick:IsA("BasePart") then return end
-                
-                if aimbotActive then
-                    local targetPlayer = getTargetPlayer()
-                    if targetPlayer and targetPlayer.Character and targetPlayer.Character:FindFirstChild("HumanoidRootPart") then
-                        local targetHrp = targetPlayer.Character.HumanoidRootPart
-                        
-                        firetouchinterest(brick, targetHrp, 0)
-                        firetouchinterest(brick, targetHrp, 1)
-                        
-                        brick.CanCollide = false
-                        brick.RotVelocity = Vector3.new(flingPower, flingPower, flingPower)
-                        brick.CFrame = targetHrp.CFrame * CFrame.new(0, -1, 0)
-                    end
-                else
-                    for _, p in pairs(Players:GetPlayers()) do
-                        if p ~= lp and p.Character and p.Character:FindFirstChild("HumanoidRootPart") then
-                            local targetHrp = p.Character.HumanoidRootPart
-                            
-                            firetouchinterest(brick, targetHrp, 0)
-                            firetouchinterest(brick, targetHrp, 1)
-                            
-                            brick.CanCollide = false
-                            brick.RotVelocity = Vector3.new(flingPower, flingPower, flingPower)
-                            brick.CFrame = targetHrp.CFrame * CFrame.new(0, -1, 0)
-                        end
-                    end
-                end
-            end)
-        end    
-    })
 
     local Tab5 = Window:CreateTab("Funny", 4483345998)
 
@@ -1082,56 +913,9 @@ else
     Tab5:CreateButton({
         Name = "Run Abuser",
         Callback = function()
-            loadstring(game:HttpGet("https://raw.githubusercontent.com/dihmuncher23-lang/Run-abuser/refs/heads/main/Run%20abuser"))()
-        end    
-    })
-
-    Tab5:CreateButton({
-        Name = "MR controller",
-        Callback = function()
-            loadstring(game:HttpGet("https://raw.githubusercontent.com/dihmuncher23-lang/Run-abuser/refs/heads/main/Cheeky"))()
-        end    
-    })
-
-    Tab5:CreateButton({
-        Name = "Barrel abuser",
-        Callback = function()
-            loadstring(game:HttpGet("https://raw.githubusercontent.com/dihmuncher23-lang/Run-abuser/refs/heads/main/Barrel"))()
-        end    
-    })
-
-    Tab5:CreateButton({
-        Name = "Virus abuser",
-        Callback = function()
-            loadstring(game:HttpGet("https://raw.githubusercontent.com/dihmuncher23-lang/Run-abuser/refs/heads/main/VirusGlove"))()
-        end    
-    })
-
-    Tab5:CreateButton({
-        Name = "Sparky controller",
-        Callback = function()
-            loadstring(game:HttpGet("https://raw.githubusercontent.com/dihmuncher23-lang/Run-abuser/refs/heads/main/Sparky"))()
-        end    
-    })
-
-    Tab5:CreateButton({
-        Name = "Gummy mastery abuser",
-        Callback = function()
-            loadstring(game:HttpGet("https://raw.githubusercontent.com/dihmuncher23-lang/Run-abuser/refs/heads/main/Gummy"))()
-        end    
-    })
-
-    Tab5:CreateButton({
-        Name = "Bus abuser",
-        Callback = function()
-            loadstring(game:HttpGet("https://raw.githubusercontent.com/dihmuncher23-lang/Run-abuser/refs/heads/main/Bus"))()
-        end    
-    })
-
-    Tab5:CreateButton({
-        Name = "Rob mastery abuser (do not quick transform)",
-        Callback = function()
-            loadstring(game:HttpGet("https://raw.githubusercontent.com/dihmuncher23-lang/Run-abuser/refs/heads/main/Rob%20abuser"))()
+            pcall(function()
+                loadstring(game:HttpGet("https://raw.githubusercontent.com/dihmuncher23-lang/Run-abuser/refs/heads/main/Run%20abuser"))()
+            end)
         end    
     })
 
@@ -1154,286 +938,31 @@ else
                         child.Enabled = false
                     end
                 end
-                head.ChildAdded:Connect(function(child)
-                    if child:IsA("BillboardGui") then
-                        child.Enabled = false
-                        for _, desc in pairs(child:GetDescendants()) do
-                            if desc:IsA("TextLabel") and string.find(string.lower(desc.Text), string.lower(lp.Name)) then
-                                desc.Visible = false
-                            end
-                        end
-                    end
-                end)
             end
 
-            if lp.Character then sanitizeCharacter(lp.Character) end
+            if lp.Character then 
+                sanitizeCharacter(lp.Character) 
+            end
             lp.CharacterAdded:Connect(sanitizeCharacter)
-
-            RunService.RenderStepped:Connect(function()
-                local char = lp.Character
-                if char and char:FindFirstChild("Head") then
-                    for _, gui in pairs(char.Head:GetChildren()) do
-                        if gui:IsA("BillboardGui") and gui.Enabled then
-                            gui.Enabled = false
-                        end
-                    end
-                end
-            end)
         end    
-    })
-
-    Tab6:CreateButton({
-        Name = "Teleport GUI",
-        Callback = function()
-            local ScreenGui = Instance.new("ScreenGui")
-            local Frame = Instance.new("Frame")
-            local DragHeader = Instance.new("Frame")
-            local Title = Instance.new("TextLabel")
-            local CloseButton = Instance.new("TextButton")
-            local ScrollingFrame = Instance.new("ScrollingFrame")
-            local UIListLayout = Instance.new("UIListLayout")
-            local OpenButton = Instance.new("TextButton")
-
-            ScreenGui.Parent = lp:WaitForChild("PlayerGui")
-            ScreenGui.ResetOnSpawn = false
-
-            Frame.Parent = ScreenGui
-            Frame.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
-            Frame.Position = UDim2.new(0.05, 0, 0.2, 0)
-            Frame.Size = UDim2.new(0, 230, 0, 400)
-            Frame.BorderSizePixel = 0
-
-            DragHeader.Parent = Frame
-            DragHeader.BackgroundColor3 = Color3.fromRGB(45, 45, 45)
-            DragHeader.Size = UDim2.new(1, 0, 0, 30)
-            DragHeader.BorderSizePixel = 0
-
-            Title.Parent = DragHeader
-            Title.Size = UDim2.new(1, -30, 1, 0)
-            Title.BackgroundTransparency = 1
-            Title.Text = "  Slap Teleport"
-            Title.TextColor3 = Color3.fromRGB(255, 255, 255)
-            Title.Font = Enum.Font.SourceSansBold
-            Title.TextSize = 14
-            Title.TextXAlignment = Enum.TextXAlignment.Left
-
-            CloseButton.Parent = DragHeader
-            CloseButton.Size = UDim2.new(0, 30, 0, 30)
-            CloseButton.Position = UDim2.new(1, -30, 0, 0)
-            CloseButton.BackgroundTransparency = 1
-            CloseButton.Text = "Close"
-            CloseButton.TextColor3 = Color3.fromRGB(255, 100, 100)
-            CloseButton.Font = Enum.Font.SourceSansBold
-            CloseButton.TextSize = 12
-
-            CloseButton.MouseButton1Click:Connect(function()
-                Frame.Visible = false
-                OpenButton.Visible = true
-            end)
-
-            OpenButton.Parent = ScreenGui
-            OpenButton.Size = UDim2.new(0, 70, 0, 30)
-            OpenButton.Position = UDim2.new(0.05, 0, 0.15, 0)
-            OpenButton.BackgroundColor3 = Color3.fromRGB(45, 45, 45)
-            OpenButton.BorderSizePixel = 0
-            OpenButton.Text = "Open"
-            OpenButton.TextColor3 = Color3.fromRGB(100, 255, 100)
-            OpenButton.Font = Enum.Font.SourceSansBold
-            OpenButton.TextSize = 14
-            OpenButton.Visible = false
-
-            OpenButton.MouseButton1Click:Connect(function()
-                Frame.Visible = true
-                OpenButton.Visible = false
-            end)
-
-            ScrollingFrame.Parent = Frame
-            ScrollingFrame.Position = UDim2.new(0, 5, 0, 35)
-            ScrollingFrame.Size = UDim2.new(1, -10, 1, -40)
-            ScrollingFrame.BackgroundTransparency = 1
-            ScrollingFrame.CanvasSize = UDim2.new(0, 0, 0, 460)
-            ScrollingFrame.ScrollBarThickness = 6
-
-            UIListLayout.Parent = ScrollingFrame
-            UIListLayout.SortOrder = Enum.SortOrder.LayoutOrder
-            UIListLayout.Padding = UDim.new(0, 5)
-
-            local locations = {
-                {name = "Main Island", cframe = CFrame.new(1.58, -5.17, 55.70, 0.096, 0.000, 0.995, 0.000, 1.000, -0.000, -0.995, 0.000, 0.096)},
-                {name = "Right Island", cframe = CFrame.new(4.39, -5.07, 186.55, -0.999, -0.000, -0.041, -0.000, 1.000, 0.000, 0.041, 0.000, -0.999)},
-                {name = "Left Island", cframe = CFrame.new(-16.71, -5.14, -195.11, 0.982, 0.000, 0.190, -0.000, 1.000, 0.000, -0.190, -0.000, 0.982)},
-                {name = "Slap Arena Island (Apples)", cframe = CFrame.new(-191.60, -5.28, -10.29, -0.409, 0.000, 0.913, 0.000, 1.000, -0.000, -0.913, -0.000, -0.409)},
-                {name = "Slap Spawn Area", cframe = CFrame.new(-376.18, 51.14, -11.84, -0.363, 0.000, 0.932, 0.000, 1.000, -0.000, -0.932, -0.000, -0.363)},
-                {name = "Cloud Area", cframe = CFrame.new(-125.00, -4.56, 121.64, -0.356, -0.000, 0.934, -0.000, 1.000, -0.000, -0.934, -0.000, -0.356)},
-                {name = "Default Arena", cframe = CFrame.new(118.63, 359.98, 16.11, 0.982, 0.000, -0.191, -0.000, 1.000, 0.000, 0.191, -0.000, 0.982)},
-                {name = "Lighthouse Island", cframe = CFrame.new(209.33, -15.72, -0.78, 0.730, 0.000, -0.684, -0.000, 1.000, 0.000, 0.684, -0.000, 0.730)},
-                {name = "Cannon Island", cframe = CFrame.new(266.92, 33.68, 198.92, 0.331, -0.000, -0.944, 0.000, 1.000, -0.000, 0.944, 0.000, 0.331)},
-                {name = "Hitman (Quests)", cframe = CFrame.new(17897.19, -130.16, -3528.10, -0.972, -0.000, -0.237, 0.000, 1.000, -0.000, 0.237, -0.000, -0.972)},
-                {name = "Lobby", cframe = CFrame.new(-1198.29, 327.91, -1.44, 0.008, 0.000, -1.000, -0.000, 1.000, 0.000, 1.000, 0.000, 0.008)}
-            }
-
-            local dragging, dragInput, dragStart, startPos
-
-            local function update(input)
-                local delta = input.Position - dragStart
-                Frame.Position = UDim2.new(startPos.X.Scale, startPos.X.Offset + delta.X, startPos.Y.Scale, startPos.Y.Offset + delta.Y)
-            end
-
-            DragHeader.InputBegan:Connect(function(input)
-                if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
-                    dragging = true
-                    dragStart = input.Position
-                    startPos = Frame.Position
-                    input.Changed:Connect(function()
-                        if input.UserInputState == Enum.UserInputState.End then
-                            dragging = false
-                        end
-                    end)
-                end
-            end)
-
-            DragHeader.InputChanged:Connect(function(input)
-                if input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch then
-                    dragInput = input
-                end
-            end)
-
-            UserInputService.InputChanged:Connect(function(input)
-                if input == dragInput and dragging then
-                    update(input)
-                end
-            end)
-
-            for _, loc in ipairs(locations) do
-                local Button = Instance.new("TextButton")
-                Button.Parent = ScrollingFrame
-                Button.Size = UDim2.new(1, 0, 0, 32)
-                Button.BackgroundColor3 = Color3.fromRGB(55, 55, 55)
-                Button.TextColor3 = Color3.fromRGB(255, 255, 255)
-                Button.Text = loc.name
-                Button.Font = Enum.Font.SourceSans
-                Button.TextSize = 14
-                Button.BorderSizePixel = 0
-                Button.MouseButton1Click:Connect(function()
-                    if lp and lp.Character and lp.Character:FindFirstChild("HumanoidRootPart") then
-                        lp.Character.HumanoidRootPart.CFrame = loc.cframe
-                    end
-                end)
-            end
-        end   
     })
 
     Tab6:CreateButton({
         Name = "Noclip",
         Callback = function()
             local character = lp.Character or lp.CharacterAdded:Wait()
-            local conn
-            conn = RunService.Stepped:Connect(function()
+            RunService.Stepped:Connect(function()
                 if character and character:Parent() then
                     for _, part in pairs(character:GetDescendants()) do
                         if part:IsA("BasePart") and part.CanCollide then
                             part.CanCollide = false
                         end
                     end
-                else
-                    conn:Disconnect()
                 end
             end)
             lp.CharacterAdded:Connect(function(newChar)
                 character = newChar
             end)
         end    
-    })
-
-    local Tab7 = Window:CreateTab("Helper logic", 4483345998)
-
-    local localPlayer = Players.LocalPlayer
-
-    _G.HelperAccountName = _G.HelperAccountName or ""
-    _G.RecipientAccountName = _G.RecipientAccountName or ""
-    _G.VoidTrackerActive = _G.VoidTrackerActive or false
-
-    if not _G.VoidTrackerActive then
-        _G.VoidTrackerActive = true
-        task.spawn(function()
-            while true do
-                task.wait(0.2)
-                if _G.HelperAccountName ~= "" and _G.RecipientAccountName ~= "" then
-                    local helperObj = Players:FindFirstChild(_G.HelperAccountName)
-                    local recipientObj = Players:FindFirstChild(_G.RecipientAccountName)
-                    
-                    if helperObj and recipientObj then
-                        local charH = helperObj.Character
-                        local charR = recipientObj.Character
-                        
-                        if charH and charR and charH:FindFirstChild("HumanoidRootPart") and charR:FindFirstChild("HumanoidRootPart") then
-                            local posH = charH.HumanoidRootPart.Position
-                            local posR = charR.HumanoidRootPart.Position
-                            
-                            if math.abs(posH.X) > 95000 and math.abs(posH.Z) > 95000 and math.abs(posR.X) > 95000 and math.abs(posR.Z) > 95000 then
-                                if localPlayer.Character and localPlayer.Character:FindFirstChildOfClass("Humanoid") then
-                                    localPlayer.Character:FindFirstChildOfClass("Humanoid").Health = 0
-                                    task.wait(5)
-                                end
-                            end
-                        end
-                    end
-                end
-            end
-        end)
-    end
-
-    local function findAndTeleport(enteredText, roleType)
-        if enteredText == "" then return end
-        
-        local targetPlayer = nil
-        for _, p in pairs(Players:GetPlayers()) do
-            if p.Name:lower():find(enteredText:lower()) or p.DisplayName:lower():find(enteredText:lower()) then
-                targetPlayer = p
-                break
-            end
-        end
-        
-        if targetPlayer and targetPlayer.Name ~= localPlayer.Name then
-            if roleType == "Helper" then
-                _G.HelperAccountName = targetPlayer.Name
-                _G.RecipientAccountName = localPlayer.Name
-            elseif roleType == "Recipient" then
-                _G.RecipientAccountName = targetPlayer.Name
-                _G.HelperAccountName = localPlayer.Name
-            end
-            
-            local character = localPlayer.Character
-            if character then
-                local rootPart = character:WaitForChild("HumanoidRootPart", 5)
-                local humanoid = character:FindFirstChildOfClass("Humanoid")
-                if rootPart and humanoid then
-                    humanoid.PlatformStand = true
-                    task.wait(0.05)
-                    rootPart.CFrame = CFrame.new(100000, 5000, 100000)
-                    rootPart.AssemblyLinearVelocity = Vector3.new(0, 0, 0)
-                    task.wait(0.1)
-                    humanoid.PlatformStand = false
-                end
-            end
-        end
-    end
-
-    Tab7:CreateInput({
-        Name = "Helper (Your alt name)",
-        PlaceholderText = "Input Name",
-        RemoveTextAfterFocusLost = false,
-        Callback = function(text)
-            findAndTeleport(text, "Helper")
-        end
-    })
-
-    Tab7:CreateInput({
-        Name = "Recipient (Your main account)",
-        PlaceholderText = "Input Name",
-        RemoveTextAfterFocusLost = false,
-        Callback = function(text)
-            findAndTeleport(text, "Recipient")
-        end
     })
 end
