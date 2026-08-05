@@ -20,6 +20,36 @@ local Workspace = game:GetService("Workspace")
 local lp = Players.LocalPlayer
 local placeId = game.PlaceId
 
+local function runSuctionCode()
+    task.spawn(function()
+        local char = lp.Character or lp.CharacterAdded:Wait()
+        local hrp = char:WaitForChild("HumanoidRootPart")
+
+        local targets = {"PlungerMain", "plunger glove", "ToiletPlunger", "Unity"}
+
+        for _, name in ipairs(targets) do
+            local item = workspace:FindFirstChild(name, true)
+            if item then
+                hrp.CFrame = item:GetPivot()
+                task.wait(0.4)
+
+                local cd = item:FindFirstChildWhichIsA("ClickDetector", true)
+                if cd then 
+                    fireclickdetector(cd) 
+                end
+
+                local part = item:IsA("Model") and (item.PrimaryPart or item:FindFirstChildWhichIsA("BasePart")) or item
+                if part and firetouchinterest then
+                    firetouchinterest(hrp, part, 0)
+                    firetouchinterest(hrp, part, 1)
+                end
+
+                task.wait(0.4)
+            end
+        end
+    end)
+end
+
 if placeId == 128229958211947 then
     local Window = Rayfield:CreateWindow({
         Name = "Femboy Hub - Shellbert",
@@ -66,6 +96,52 @@ if placeId == 128229958211947 then
                     task.wait(0.05)
                 end
             end
+        end
+    })
+
+elseif placeId == 89837553336708 then
+    local Window = Rayfield:CreateWindow({
+        Name = "Femboy Hub - Suction",
+        LoadingTitle = "Femboy Hub",
+        LoadingSubtitle = "by silentabsolutedayn",
+        ConfigurationSaving = { Enabled = false }
+    })
+
+    local Tab = Window:CreateTab("Suction", 4483345998)
+
+    Tab:CreateButton({
+        Name = "Auto-Get suction",
+        Callback = function()
+            runSuctionCode()
+        end
+    })
+
+elseif placeId == 74169485398268 then
+    local Window = Rayfield:CreateWindow({
+        Name = "Femboy Hub - Bind",
+        LoadingTitle = "Femboy Hub",
+        LoadingSubtitle = "by silentabsolutedayn",
+        ConfigurationSaving = { Enabled = false }
+    })
+
+    local Tab = Window:CreateTab("Bind", 4483345998)
+
+    Tab:CreateButton({
+        Name = "Auto-Get bind",
+        Callback = function()
+            local function getBind()
+                local orb = workspace:FindFirstChild("Orb")
+                if orb then
+                    local cd = orb:FindFirstChildWhichIsA("ClickDetector")
+                    if cd then
+                        for i = 1, 10 do
+                            fireclickdetector(cd)
+                        end
+                    end
+                end
+            end
+
+            task.spawn(getBind)
         end
     })
 
@@ -515,6 +591,111 @@ elseif placeId == 101113181694564 then
         end
     })
 
+elseif placeId == 125845699717230 then
+    local Window = Rayfield:CreateWindow({
+        Name = "Femboy Hub - Doorkeeper",
+        LoadingTitle = "Femboy Hub",
+        LoadingSubtitle = "by silentabsolutedayn",
+        ConfigurationSaving = { Enabled = false }
+    })
+
+    local Tab = Window:CreateTab("Doorkeeper", 4483345998)
+
+    Tab:CreateButton({
+        Name = "Auto-Get doorkeeper",
+        Callback = function()
+            local function spamDoors()
+                pcall(function()
+                    if typeof(CreateMessage) == "function" then
+                        local msg = CreateMessage()
+                        if msg then
+                            msg.Text = "Spamming All Doors..."
+                        end
+                    end
+                end)
+
+                while true do
+                    -- 1. Активация всех ProximityPrompt
+                    for _, prompt in ipairs(workspace:GetDescendants()) do
+                        if prompt:IsA("ProximityPrompt") then
+                            pcall(function()
+                                fireproximityprompt(prompt)
+                            end)
+                        end
+                    end
+
+                    -- 2. Кликеры и прямые клики по Hitbox / ClickDetector
+                    for _, obj in ipairs(workspace:GetDescendants()) do
+                        if obj:IsA("ClickDetector") then
+                            pcall(function()
+                                fireclickdetector(obj)
+                            end)
+                        elseif obj.Name == "Hitbox" and obj:IsA("BasePart") then
+                            pcall(function()
+                                if firetouchinterest and lp.Character and lp.Character:FindFirstChild("HumanoidRootPart") then
+                                    firetouchinterest(lp.Character.HumanoidRootPart, obj, 0)
+                                    firetouchinterest(lp.Character.HumanoidRootPart, obj, 1)
+                                end
+                            end)
+                        end
+                    end
+
+                    task.wait(0.05)
+                end
+            end
+
+            task.spawn(spamDoors)
+        end
+    })
+
+elseif placeId == 93981091811742 then
+    local Window = Rayfield:CreateWindow({
+        Name = "Femboy Hub - Lotus",
+        LoadingTitle = "Femboy Hub",
+        LoadingSubtitle = "by silentabsolutedayn",
+        ConfigurationSaving = { Enabled = false }
+    })
+
+    local Tab = Window:CreateTab("Lotus", 4483345998)
+
+    Tab:CreateButton({
+        Name = "Auto-Get lotus",
+        Callback = function()
+            local ws = workspace
+            local rs = game:GetService("ReplicatedStorage")
+
+            task.spawn(function()
+                pcall(function()
+                    local cd1 = ws.Lotus1_Red.Lotus.Primary.ClickDetector
+                    fireclickdetector(cd1)
+                end)
+                
+                pcall(function()
+                    rs.Remotes.Lotus2Complete:FireServer()
+                end)
+                
+                pcall(function()
+                    fireclickdetector(ws.Lotus4_Pink.Lotus.Primary.ClickDetector)
+                    fireclickdetector(ws.Lotus5_White.Lotus.Primary.ClickDetector)
+                    if typeof(TouchObject) == "function" then
+                        TouchObject(ws.Lotus3_Blue.Detector)
+                    end
+                end)
+                
+                task.wait(0.2)
+                
+                pcall(function()
+                    rs.Remotes.Minigames.Complete:FireServer()
+                end)
+                
+                local blue = ws:WaitForChild("Lotus3_Blue")
+                repeat task.wait() until blue:FindFirstChild("Lotus") and blue.Lotus:FindFirstChild("Primary") and blue.Lotus.Primary:FindFirstChild("ClickDetector")
+                
+                fireclickdetector(blue.Lotus.Primary.ClickDetector)
+            end)
+        end
+    })
+
 else
     local Window = Rayfield:CreateWindow({
         Name = "Femboy Hub",
@@ -549,6 +730,20 @@ else
     end
 
     local Tab1 = Window:CreateTab("Slap Battles Badges", 4483345998)
+
+    Tab1:CreateButton({
+        Name = "Auto-Get bind",
+        Callback = function()
+            game:GetService("TeleportService"):Teleport(74169485398268)
+        end
+    })
+
+    Tab1:CreateButton({
+        Name = "Auto-Get suction",
+        Callback = function()
+            runSuctionCode()
+        end
+    })
 
     Tab1:CreateButton({
         Name = "Auto-Get lag",
@@ -696,6 +891,41 @@ end
                 end
                 TeleportService:Teleport(101113181694564, lp)
             end
+        end
+    })
+
+    Tab1:CreateButton({
+        Name = "Auto-Get debug",
+        Callback = function()
+            task.spawn(function()
+                repeat task.wait() until game:IsLoaded()
+
+                local char = lp.Character or lp.CharacterAdded:Wait()
+                local hrp = char:WaitForChild("HumanoidRootPart")
+
+                hrp.CFrame = CFrame.new(-17948.535156, 59.828022, 3600.984863)
+
+                task.wait(0.5)
+
+                local room = workspace:FindFirstChild("Debug Room")
+
+                if room then
+                    local btns = room.Keypad.Buttons
+                    
+                    local function press(btn)
+                        if btn and btn:FindFirstChild("ClickDetector") then
+                            fireclickdetector(btn.ClickDetector)
+                            task.wait(0.1)
+                        end
+                    end
+
+                    press(btns[tostring(room.DuckTable.DuckTable.Duckies.Value)])
+                    press(btns[room.AdminGloves.GlovesCode.SurfaceGui.AdminNumber.Text])
+                    press(btns[room.Maze.MazePrize.SurfaceGui.MazeNumber.Text])
+                    press(btns["7"])
+                    press(btns.Enter)
+                end
+            end)
         end
     })
 
@@ -1047,42 +1277,16 @@ end
     })
 
     Tab1:CreateButton({
-        Name = "Auto get plate (with auto executed noclip)",
+        Name = "Auto-Get lotus",
         Callback = function()
-            local function target(v)
-                if v:IsA("BasePart") and v.Color == Color3.fromRGB(255, 0, 0) then
-                    pcall(function() v:Destroy() end)
-                end
-            end
-            for _, v in Workspace:GetDescendants() do target(v) end
-            Workspace.DescendantAdded:Connect(target)
-            RunService.Stepped:Connect(function()
-                local char = lp.Character
-                if not char then return end
-                for _, v in char:GetDescendants() do
-                    if v:IsA("BasePart") then
-                        v.CanCollide = false
-                    end
-                end
-            end)
-        end
-    })
-
-    Tab1:CreateButton({
-        Name = "Insta Lotus (disable verify teleports!)",
-        Callback = function()
-            pcall(function()
-                loadstring(game:HttpGet('https://pastefy.app/Ds8bqkE9/raw'))()
-            end)
+            TeleportService:Teleport(93981091811742, lp)
         end    
     })
 
     Tab1:CreateButton({
-        Name = "Auto get doorkeeper (disable verify teleports!)",
+        Name = "Auto-Get doorkeeper",
         Callback = function()
-            pcall(function()
-                loadstring(game:HttpGet('https://pastefy.app/zbj5RgPl/raw'))()
-            end)
+            TeleportService:Teleport(125845699717230, lp)
         end    
     })
 
