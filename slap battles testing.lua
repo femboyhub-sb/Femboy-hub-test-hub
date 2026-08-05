@@ -451,6 +451,70 @@ elseif placeId == 132277598079047 then
         end
     })
 
+elseif placeId == 101113181694564 then
+    local Window = Rayfield:CreateWindow({
+        Name = "Femboy Hub - Shellbert",
+        LoadingTitle = "Femboy Hub",
+        LoadingSubtitle = "by silentabsolutedayn",
+        ConfigurationSaving = { Enabled = false }
+    })
+
+    local Tab = Window:CreateTab("Shellbert", 4483345998)
+
+    Tab:CreateButton({
+        Name = "Auto-Get conker",
+        Callback = function()
+            task.spawn(function()
+                local remotes = ReplicatedStorage:WaitForChild("Remotes", 5)
+                if remotes and remotes:FindFirstChild("Dialogue") then
+                    remotes.Dialogue.FinishedNPCDialogue:FireServer()
+                end
+
+                task.wait(1)
+                if Workspace:FindFirstChild("Map") and Workspace.Map.Props.BasketCollection.Basket:FindFirstChild("ClickDetector") then
+                    fireclickdetector(Workspace.Map.Props.BasketCollection.Basket.ClickDetector)
+                end
+                
+                task.wait(7.5)
+
+                while task.wait() do
+                    local char = lp.Character
+                    local hrp = char and char:FindFirstChild("HumanoidRootPart")
+                    
+                    if hrp then
+                        hrp.CFrame = CFrame.new(36, 4, 1.5)
+
+                        local conker = Workspace:FindFirstChild("Conker")
+                        if conker then
+                            firetouchinterest(hrp, conker, 0)
+                            firetouchinterest(hrp, conker, 1)
+                        end
+
+                        pcall(function()
+                            ReplicatedStorage.Remotes.tool.use:FireServer("slap")
+                            if Workspace:FindFirstChild("NPCs") then
+                                for _, v in ipairs(Workspace.NPCs:GetChildren()) do
+                                    if v:FindFirstChild("HumanoidRootPart") then
+                                        ReplicatedStorage.Remotes.tool.hit:FireServer(
+                                            "slap",
+                                            {["Instance"] = v.HumanoidRootPart}
+                                        )
+                                    end
+                                end
+                            end
+                        end)
+                        
+                        pcall(function()
+                            if Workspace.Map.CoreAssets.Bowl:FindFirstChild("ProximityPrompt") then
+                                fireproximityprompt(Workspace.Map.CoreAssets.Bowl.ProximityPrompt)
+                            end
+                        end)
+                    end
+                end
+            end)
+        end
+    })
+
 else
     local Window = Rayfield:CreateWindow({
         Name = "Femboy Hub",
@@ -485,6 +549,155 @@ else
     end
 
     local Tab1 = Window:CreateTab("Slap Battles Badges", 4483345998)
+
+    Tab1:CreateButton({
+        Name = "Auto-Get lag",
+        Callback = function()
+            pcall(function()
+                if ReplicatedStorage:FindFirstChild("Events") and ReplicatedStorage.Events:FindFirstChild("celestial") then
+                    ReplicatedStorage.Events.celestial:FireServer("air_time_guy")
+                end
+            end)
+        end
+    })
+
+    Tab1:CreateButton({
+        Name = "Auto-Get the schlob",
+        Callback = function()
+            task.spawn(function()
+                pcall(function()
+                    local LocalPlayer = lp
+                    local Character = LocalPlayer.Character or LocalPlayer.CharacterAdded:Wait()
+                    local HumanoidRootPart = Character:WaitForChild("HumanoidRootPart")
+                    local Humanoid = Character:WaitForChild("Humanoid")
+
+                    local equip = debug.getupvalues(require(ReplicatedStorage.BACKEND.Lib.Network).fireServer)[3]("SelectGlove")
+
+                    local function getLatestCloud()
+                        local latest = nil
+                        for _, v in pairs(Workspace:GetChildren()) do
+                            if v.Name:find("_Cloud") and v:FindFirstChild("VehicleSeat") then
+                                latest = v
+                            end
+                        end
+                        return latest
+                    end
+
+                    HumanoidRootPart:PivotTo(CFrame.new(243, -16, 0))
+                    task.wait(0.3)
+
+                    equip:FireServer("Cloud")
+                    task.wait(0.2)
+                    ReplicatedStorage.CloudAbility:FireServer()
+                    task.wait(0.3)
+
+                    HumanoidRootPart:PivotTo(CFrame.new(243.14, -15.72, -8.10, 1, 0, -0.021, 0, 1, 0, 0.021, 0, 1))
+                    task.wait(0.2)
+
+                    equip:FireServer("fish")
+                    task.wait(0.3)
+
+                    HumanoidRootPart:PivotTo(CFrame.new(120, 360, -3))
+
+                    local cloudModel = nil
+                    local seat = nil
+                    for i = 1, 20 do
+                        local cloud = getLatestCloud()
+                        if cloud and cloud:FindFirstChild("VehicleSeat") then
+                            cloudModel = cloud
+                            seat = cloud.VehicleSeat
+                            break
+                        end
+                        task.wait(0.1)
+                    end
+
+                    if seat then
+                        repeat
+                            HumanoidRootPart.CFrame = seat.CFrame + Vector3.new(0, 2, 0)
+                            seat:Sit(Humanoid)
+                            task.wait(0.1)
+                        until Humanoid.Sit == true
+                    end
+
+                    task.wait(0.8)
+
+                    local targetCloudCFrame = CFrame.new(196.48, 147.59, 88.80, 0.234, 0.000, 0.972, -0.000, 1.000, 0.000, -0.972, -0.000, 0.234)
+
+                    if cloudModel then
+                        cloudModel:PivotTo(targetCloudCFrame)
+                    end
+
+                    task.wait(1.5)
+
+                    Humanoid.Sit = false
+                    task.wait(0.1)
+
+                    ReplicatedStorage.GeneralAbility:FireServer()
+
+                    task.wait(0.7)
+
+                    local plate = Workspace:WaitForChild("Arena"):WaitForChild("Plate")
+                    for i = 1, 400 do
+                        HumanoidRootPart.CFrame = plate.CFrame * CFrame.new(0, 1.5, 0)
+                        task.wait(0.005)
+                    end
+
+                    Humanoid.Health = 0
+                end)
+            end)
+        end
+    })
+
+    Tab1:CreateButton({
+        Name = "Auto-Get Conker",
+        Callback = function()
+            local s = [[
+if not game:IsLoaded() then game.Loaded:Wait() end
+task.wait(0.5)
+
+local workspace = game:GetService("Workspace")
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local hrp = game:GetService("Players").LocalPlayer.Character.HumanoidRootPart
+
+ReplicatedStorage.Remotes.Dialogue.FinishedNPCDialogue:FireServer()
+
+task.wait(1)
+fireclickdetector(workspace.Map.Props.BasketCollection.Basket.ClickDetector)
+task.wait(7.5)
+
+while task.wait() do
+    hrp.CFrame = CFrame.new(36, 4, 1.5)
+
+    if workspace:FindFirstChild("Conker") then
+        firetouchinterest(hrp, workspace.Conker, 0)
+        firetouchinterest(hrp, workspace.Conker, 1)
+    end
+
+    ReplicatedStorage.Remotes.tool.use:FireServer("slap")
+    for i, v in ipairs(workspace.NPCs:GetChildren()) do
+        if v:FindFirstChild("HumanoidRootPart") then
+            ReplicatedStorage.Remotes.tool.hit:FireServer(
+                "slap",
+                {["Instance"] = v.HumanoidRootPart}
+            )
+        end
+    end
+    
+    fireproximityprompt(workspace.Map.CoreAssets.Bowl.ProximityPrompt)
+end
+]]
+
+            local qtp = queue_on_teleport or queueonteleport
+            if game.PlaceId == 101113181694564 then
+                loadstring(s)()
+            else
+                if qtp then
+                    qtp(s)
+                end
+                TeleportService:Teleport(101113181694564, lp)
+            end
+        end
+    })
 
     Tab1:CreateButton({
         Name = "Plate",
@@ -963,6 +1176,6 @@ else
             lp.CharacterAdded:Connect(function(newChar)
                 character = newChar
             end)
-        end    
+        end
     })
 end
