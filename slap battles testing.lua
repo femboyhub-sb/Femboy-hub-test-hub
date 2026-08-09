@@ -1393,6 +1393,16 @@ end
         end
     })
 end
+elseif placeid == 18550498098 then
+local Window = Rayfield:CreateWindow({
+   Name = "Femboy hub - Where Guide Resides",
+   LoadingTitle = "Femboy hub - Where Guide Resides",
+   LoadingSubtitle = "by Silent AbsoluteDayn",
+   ConfigurationSaving = {
+      Enabled = true,
+      FolderName = nil, -- Create a custom folder for your hub/game
+      FileName = "Big Hub"
+            local Tab = Window:CreateTab("Relude (Test)", 4483362458) -- Title, Image
 local Button = Tab1:CreateButton({
    Name = "Auto Relude",
    Callback = function()
