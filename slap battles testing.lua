@@ -1407,133 +1407,133 @@ local Tab = Window:CreateTab("Relude (Test)", 4483362458)
 local Button = Tab:CreateButton({
    Name = "Auto Relude",
    Callback = function()
-            local plrs = game:GetService("Players")
-local storage = game:GetService("ReplicatedStorage")
-local lp = plrs.LocalPlayer
+      local plrs = game:GetService("Players")
+      local storage = game:GetService("ReplicatedStorage")
+      local lp = plrs.LocalPlayer
 
-local function getChar()
-    local char = lp.Character
-    if char then
-        local hrp = char:FindFirstChild("HumanoidRootPart")
-        local hum = char:FindFirstChildOfClass("Humanoid")
-        if hrp and hum and hum.Health > 0 then
-            return char, hrp
-        end
-    end
-end
+      local function getChar()
+          local char = lp.Character
+          if char then
+              local hrp = char:FindFirstChild("HumanoidRootPart")
+              local hum = char:FindFirstChildOfClass("Humanoid")
+              if hrp and hum and hum.Health > 0 then
+                  return char, hrp
+              end
+          end
+      end
 
-local function freeze(hrp, enable)
-    if not hrp then return end
-    local bv = hrp:FindFirstChild("ServerHoldVelocity")
-    
-    if enable then
-        if not bv then
-            bv = Instance.new("BodyVelocity")
-            bv.Name = "ServerHoldVelocity"
-            bv.MaxForce = Vector3.new(1e9, 1e9, 1e9)
-            bv.Velocity = Vector3.zero
-            bv.Parent = hrp
-        end
-        hrp.AssemblyLinearVelocity = Vector3.zero
-        hrp.AssemblyAngularVelocity = Vector3.zero
-    elseif bv then
-        bv:Destroy()
-    end
-end
+      local function freeze(hrp, enable)
+          if not hrp then return end
+          local bv = hrp:FindFirstChild("ServerHoldVelocity")
+          
+          if enable then
+              if not bv then
+                  bv = Instance.new("BodyVelocity")
+                  bv.Name = "ServerHoldVelocity"
+                  bv.MaxForce = Vector3.new(1e9, 1e9, 1e9)
+                  bv.Velocity = Vector3.zero
+                  bv.Parent = hrp
+              end
+              hrp.AssemblyLinearVelocity = Vector3.zero
+              hrp.AssemblyAngularVelocity = Vector3.zero
+          elseif bv then
+              bv:Destroy()
+          end
+      end
 
-local startCF = CFrame.new(3270.68, -227.50, 822.93, 0.580, 0.000, -0.814, -0.000, 1.000, 0.000, 0.814, 0.000, 0.580)
-local t0 = tick()
-while tick() - t0 < 0.5 do
-    local char, hrp = getChar()
-    if char and hrp then
-        char:PivotTo(startCF)
-    end
-    task.wait()
-end
+      local startCF = CFrame.new(3270.68, -227.50, 822.93, 0.580, 0.000, -0.814, -0.000, 1.000, 0.000, 0.814, 0.000, 0.580)
+      local t0 = tick()
+      while tick() - t0 < 0.5 do
+          local char, hrp = getChar()
+          if char and hrp then
+              char:PivotTo(startCF)
+          end
+          task.wait()
+      end
 
-task.spawn(function()
-    local cf = CFrame.new(3249.47, -58.50, 821.98, 0.017, 0, -1, 0, 1, 0, 1, 0, 0.017)
-    local t = tick()
-    while tick() - t < 26 do
-        local _, hrp = getChar()
-        if hrp then 
-            hrp.CFrame = cf 
-        end
-        task.wait()
-    end
-end)
+      task.spawn(function()
+          local cf = CFrame.new(3249.47, -58.50, 821.98, 0.017, 0, -1, 0, 1, 0, 1, 0, 0.017)
+          local t = tick()
+          while tick() - t < 26 do
+              local _, hrp = getChar()
+              if hrp then 
+                  hrp.CFrame = cf 
+              end
+              task.wait()
+          end
+      end)
 
-task.wait(5)
+      task.wait(5)
 
-for _, v in workspace:GetDescendants() do
-    if v.Name == "ShackLever" then
-        local cd = v:FindFirstChildWhichIsA("ClickDetector")
-        if cd then
-            pcall(function()
-                for _ = 1, 10 do
-                    fireclickdetector(cd)
-                    task.wait(0.1)
-                end
-            end)
-        end
-    end
-end
+      for _, v in workspace:GetDescendants() do
+          if v.Name == "ShackLever" then
+              local cd = v:FindFirstChildWhichIsA("ClickDetector")
+              if cd then
+                  pcall(function()
+                      for _ = 1, 10 do
+                          fireclickdetector(cd)
+                          task.wait(0.1)
+                      end
+                  end)
+              end
+          end
+      end
 
-repeat task.wait(0.5) 
-until workspace:FindFirstChild("Map") 
-  and workspace.Map:FindFirstChild("Components") 
-  and workspace.Map.Components:FindFirstChild("GuideNPC")
+      repeat task.wait(0.5) 
+      until workspace:FindFirstChild("Map") 
+        and workspace.Map:FindFirstChild("Components") 
+        and workspace.Map.Components:FindFirstChild("GuideNPC")
 
-local cf2 = CFrame.new(589.10, 189.86, -246.86, -1, 0, 0.012, 0, 1, -0.004, -0.012, -0.004, -1)
+      local cf2 = CFrame.new(589.10, 189.86, -246.86, -1, 0, 0.012, 0, 1, -0.004, -0.012, -0.004, -1)
 
-task.spawn(function()
-    while true do
-        local char, hrp = getChar()
-        if char and hrp then
-            char:PivotTo(cf2)
-            freeze(hrp, true)
-        end
-        task.wait()
-    end
-end)
+      task.spawn(function()
+          while true do
+              local char, hrp = getChar()
+              if char and hrp then
+                  char:PivotTo(cf2)
+                  freeze(hrp, true)
+              end
+              task.wait()
+          end
+      end)
 
-while task.wait(0.1) do
-    local char, hrp = getChar()
-    
-    if char then
-        local item = lp.Backpack:FindFirstChild("Lantern")
-        if item then
-            item.Parent = char
-        end
-        
-        pcall(function()
-            local remotes = storage:FindFirstChild("Remotes")
-            if remotes and remotes:FindFirstChild("Data") and remotes.Data:FindFirstChild("AnswerInCutscene") then
-                remotes.Data.AnswerInCutscene:FireServer("Spare")
-            end
-        end)
+      while task.wait(0.1) do
+          local char, hrp = getChar()
+          
+          if char then
+              local item = lp.Backpack:FindFirstChild("Lantern")
+              if item then
+                  item.Parent = char
+              end
+              
+              pcall(function()
+                  local remotes = storage:FindFirstChild("Remotes")
+                  if remotes and remotes:FindFirstChild("Data") and remotes.Data:FindFirstChild("AnswerInCutscene") then
+                      remotes.Data.AnswerInCutscene:FireServer("Spare")
+                  end
+              end)
 
-        local lantern = char:FindFirstChild("Lantern")
-        if lantern then
-            lantern:Activate()
-            
-            local net = lantern:FindFirstChild("Network")
-            if net then
-                for _, v in workspace:GetChildren() do
-                    if v.Name == "PusherWall" and v:IsA("BasePart") then
-                        v.CanCollide = false
-                    elseif v.Name == "golem" and v:FindFirstChild("Hitbox") then
-                        net:FireServer("Hit", v.Hitbox)
-                    elseif (v.Name == "GuideNPC" or v.Name == "ReplicaNPC") and v:FindFirstChild("HumanoidRootPart") then
-                        net:FireServer("Hit", v.HumanoidRootPart)
-                    elseif v.Name == "TrackGloveMissile" then
-                        net:FireServer("Hit", v)
-                    end
-                end
-            end
-        end
-    end
-            end
-   -- The function that takes place when the button is pressed
-   end,
+              local lantern = char:FindFirstChild("Lantern")
+              if lantern then
+                  lantern:Activate()
+                  
+                  local net = lantern:FindFirstChild("Network")
+                  if net then
+                      for _, v in workspace:GetChildren() do
+                          if v.Name == "PusherWall" and v:IsA("BasePart") then
+                              v.CanCollide = false
+                          elseif v.Name == "golem" and v:FindFirstChild("Hitbox") then
+                              net:FireServer("Hit", v.Hitbox)
+                          elseif (v.Name == "GuideNPC" or v.Name == "ReplicaNPC") and v:FindFirstChild("HumanoidRootPart") then
+                              net:FireServer("Hit", v.HumanoidRootPart)
+                          elseif v.Name == "TrackGloveMissile" then
+                              net:FireServer("Hit", v)
+                          end
+                      end
+                  end
+              end
+          end
+      end
+   end
 })
+end
